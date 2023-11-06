@@ -1,0 +1,16 @@
+TANK BATTLE 2D
+
+Componenti:
+Server java
+Client java
+Classi per la gestione dei componenti
+
+funzionalità:
+-2 o più client che giocano come tank(s) -> classe client
+-server che valida le richieste (operazioni) -> server
+-tramite "GestioneGioco" gestisco gli aspetti grafici e 
+di gameplay come i punti e le vite
+-classe messaggio per inviare a client o server le richieste/risposte
+-classe proiettile per gestire alcune caratteristiche del proiettile
+-blocco della mappa (distruggibile) che fa da ostacolo
+
