@@ -1,5 +1,4 @@
 import java.util.*;
-import java.util.List;
 import java.io.IOException;
 
 import javax.swing.*;
@@ -11,6 +10,8 @@ public class GestioneGioco extends JPanel {
     List<Carro> listaCarri;
     final static int WIDTH_PUNTEGGIO = 140;
     final static int HEIGH_PUNTEGGIO = 600;
+    final static int DIFF_Y_SPARO = 15;
+    final static int DIFF_X_SPARO = 21;
     final static int X_TITOLO = 655;
     final static int Y_TITOLO = 30;
     final static int delay = 100;
@@ -42,7 +43,17 @@ public class GestioneGioco extends JPanel {
     public void disegnaTabellaInfo() {
 
     }
-
+    public String inizializzaSparo(String lettera) {
+        String posIniSparo = "";
+        for(int i = 0; i < this.listaCarri.size(); i++) {
+            if(this.listaCarri.get(i).letteraCarro.equals(lettera)) {
+                int posIniSparoX = this.listaCarri.get(i).xGiocatore + DIFF_X_SPARO;
+                int posIniSparoY = this.listaCarri.get(i).yGiocatore - DIFF_Y_SPARO;
+                posIniSparo = "M" + ";" + this.listaCarri.get(i).letteraCarro + ";" + posIniSparoX + ";" + posIniSparoY; 
+            }
+        }
+        return posIniSparo;
+    }
     //muove il carro nella direzione indicata dal client
     public String muoviCarro(String carro, String direzione){
         String messaggioClient = "";

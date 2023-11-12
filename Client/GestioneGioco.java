@@ -15,6 +15,7 @@ import javax.swing.Timer;
 public class GestioneGioco extends JPanel {
     GestioneBlocchi gestioneBl;
     List<Carro> listaCarri;
+    List<Sparo> listaSpari;
     final static int WIDTH_PUNTEGGIO = 140;
     final static int HEIGH_PUNTEGGIO = 600;
     final static int X_TITOLO = 655;
@@ -24,6 +25,7 @@ public class GestioneGioco extends JPanel {
         gestioneBl = gb;
 		setFocusable(true);
         this.listaCarri = new ArrayList<Carro>();
+        this.listaSpari = new ArrayList<Sparo>();
         //MODIFICARE la lettera
         //timer con cui viene chiamata la repaint che ridisegna TUTTO
         Timer timer = new Timer(delay, new ActionListener() {
@@ -41,7 +43,7 @@ public class GestioneGioco extends JPanel {
     //disegno lo sfondo usando il parametro graphics 
     public void disegnaSfondoGraphics(Graphics g) { 
         //immagine di sfondo
-        ImageIcon imageIcon = new ImageIcon("images/sfondoCitta3.png");
+        ImageIcon imageIcon = new ImageIcon("images/sfondoCampo1.jpg");
         Image sfondo = imageIcon.getImage();
         g.drawImage(sfondo, 0, 0, getWidth(), getHeight(), this);
     
@@ -61,6 +63,7 @@ public class GestioneGioco extends JPanel {
         super.paintComponent(g);
         disegnaSfondoGraphics(g);
         disegnaGiocatori(g);
+        disegnaSpari(g);
         try {
             disegnaBlocchi(g);
         } catch (IOException e) {
@@ -75,6 +78,13 @@ public class GestioneGioco extends JPanel {
             giocatore.paintIcon(this, g, listaCarri.get(i).xGiocatore, listaCarri.get(i).yGiocatore);
         }
     }
+    public void disegnaSpari(Graphics g) {
+        for(int i = 0; i < listaSpari.size(); i++) {
+            ImageIcon sparo = new ImageIcon("images/sparo.png");
+            sparo.paintIcon(this, g, listaSpari.get(i).XSparo, listaSpari.get(i).YSparo);
+            listaSpari.get(i).aggiorna();
+        }
+    }
     public void disegnaBlocchi(Graphics g) throws IOException {
         //disegno i blocchi
 		gestioneBl.disegna(this, g);
@@ -87,5 +97,17 @@ public class GestioneGioco extends JPanel {
                 carroTmp.yGiocatore = Integer.parseInt(y);
             }
         }
+    }
+    public void inizializzaSparo(String lettera, int iniX, int iniY) {
+        Sparo sparo = new Sparo(lettera, iniX, iniY);
+        this.listaSpari.add(sparo);
+    }
+    public Carro inzializzaCarroClient(String lettera) {
+        for(int i = 0; i < this.listaCarri.size(); i++) {
+            if(listaCarri.get(i).letteraCarro.equals(lettera)) {
+                return listaCarri.get(i);
+            }
+        }
+        return null;
     }
 }

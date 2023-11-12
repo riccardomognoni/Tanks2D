@@ -49,19 +49,18 @@ public class Messaggio {
         //csvData = reader.readLine(); 
         return csvData;
     }
-    //ha un problema del ricevere
+    //leggo la posizione ricevuta dal server
     public int[] leggiPosizioneServer() throws IOException {
         String csvData = reader.readLine();
         System.out.println(csvData);
-        
-        // Split the combined data into separate integers
+
         String[] parts = csvData.split(",");
         if (parts.length == 2) {
             int posizioneXClient = Integer.parseInt(parts[0]);
             int posizioneYClient = Integer.parseInt(parts[1]);
             return new int[] {posizioneXClient, posizioneYClient};
         } else {
-            throw new IOException("Error reading data from the server.");
+            throw new IOException("errore.");
         }
     }
     public String riceviMessaggio() throws IOException {

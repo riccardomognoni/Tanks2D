@@ -10,6 +10,7 @@ import org.xml.sax.SAXException;
 public class Client {
     //lettera assegnata al carro
     static String letteraGiocatore = "";
+    static Carro carroPlayer;
     public static String ip;
     public static int porta;
     static DatagramSocket socket;
@@ -18,6 +19,8 @@ public class Client {
     static boolean primaLettera = true;
     public static void main(String[] args) throws SAXException, IOException, ParserConfigurationException {
         comunicazioneServer = new Messaggio();
+        JFrame objGrafica = new JFrame();
+
         //MI SINCRONIZZO
         comunicazioneServer.inviaServer("sincronizza");
         
@@ -35,21 +38,15 @@ public class Client {
             }
             //RICEVO LA POSIZIONE INIZIALE (X E Y) DEL CARRO DAL SERVER - X
             int posizioneClient[] = comunicazioneServer.leggiPosizioneServer();
-
             gc.addCarro(_letteraCarro, posizioneClient[0], posizioneClient[1]);
         }
-        
-        JFrame objGrafica = new JFrame();
+        carroPlayer = gc.inzializzaCarroClient(letteraGiocatore);
         disegnaFinestra(objGrafica, gc);
         objGrafica.setVisible(true);
         //AGGIUNGO IL KEY LISTENER
-        InputKey kl = new InputKey(comunicazioneServer, letteraGiocatore);
+        InputKey kl = new InputKey(comunicazioneServer, carroPlayer);
         //CONTROLLO SE IL PLAYER HA CLICCATO UN TASTO
-        objGrafica.addKeyListener(kl);
-        objGrafica.setVisible(true);
-        objGrafica.setFocusable(true);
-        objGrafica.requestFocus();
-        objGrafica.requestFocusInWindow();
+        inizializzaListener(objGrafica, kl);
         //FACCIO CICLO INFINITO CHE LEGGE
         while(true) {
             String messaggio = comunicazioneServer.riceviMessaggio();
@@ -59,6 +56,12 @@ public class Client {
                 String x = messVett[1];
                 String y = messVett[2];
                 gc.modificaXYcarro(lettera, x, y);
+            }
+            else if(messVett.length == 4) {
+                String lettera = messVett[1];
+                String x = messVett[2];
+                String y = messVett[3];
+                gc.inizializzaSparo(lettera, Integer.parseInt(x), Integer.parseInt(y));
             }
         }
     }
@@ -74,4 +77,12 @@ public class Client {
 		objGrafica.add(gc);
 		objGrafica.setVisible(true);
     }
+    public static void inizializzaListener(JFrame objGrafica, InputKey kl) {
+        objGrafica.addKeyListener(kl);
+        objGrafica.setVisible(true);
+        objGrafica.setFocusable(true);
+        objGrafica.requestFocus();
+        objGrafica.requestFocusInWindow();
+    }
+    
 }
