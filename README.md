@@ -1,5 +1,5 @@
 # File README del progetto Tanks2D
 
-### Istruzioni
-- Item 1
+### INFORMAZIONI
+- Progetto base: https://github.com/TommasoMardegan/tommasomardegan.github.io/tree/main/tankBattle2D
 - 
