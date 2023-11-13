@@ -2,6 +2,7 @@ import java.io.*;
 import java.net.*;
 import java.nio.ByteBuffer;
 
+
 public class Server {
     public static int indiceLettera = 0;
     static String[] lettere = {"A", "B", "C", "D"};
