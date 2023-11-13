@@ -98,8 +98,8 @@ public class GestioneGioco extends JPanel {
             }
         }
     }
-    public void inizializzaSparo(String lettera, int iniX, int iniY) {
-        Sparo sparo = new Sparo(lettera, iniX, iniY);
+    public void inizializzaSparo(String direzione,String lettera, int iniX, int iniY) {
+        Sparo sparo = new Sparo(direzione,lettera, iniX, iniY);
         this.listaSpari.add(sparo);
     }
     public Carro inzializzaCarroClient(String lettera) {

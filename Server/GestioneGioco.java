@@ -35,21 +35,14 @@ public class GestioneGioco extends JPanel {
     public void controllaVite() {
 
     }
-    //controllo la posizione per validarla o meno
-    public void controllaPosizione() {
-
-    }
-    //disegna la tabella delle informazioni come vite e punteggio
-    public void disegnaTabellaInfo() {
-
-    }
+ 
     public String inizializzaSparo(String lettera) {
         String posIniSparo = "";
         for(int i = 0; i < this.listaCarri.size(); i++) {
             if(this.listaCarri.get(i).letteraCarro.equals(lettera)) {
-                int posIniSparoX = this.listaCarri.get(i).xGiocatore + DIFF_X_SPARO;
-                int posIniSparoY = this.listaCarri.get(i).yGiocatore - DIFF_Y_SPARO;
-                posIniSparo = "M" + ";" + this.listaCarri.get(i).letteraCarro + ";" + posIniSparoX + ";" + posIniSparoY; 
+                int posIniSparoX = this.listaCarri.get(i).xGiocatore;
+                int posIniSparoY = this.listaCarri.get(i).yGiocatore;
+                posIniSparo = this.listaCarri.get(i).direzioneCorrente + ";" + this.listaCarri.get(i).letteraCarro + ";" + posIniSparoX + ";" + posIniSparoY; 
             }
         }
         return posIniSparo;

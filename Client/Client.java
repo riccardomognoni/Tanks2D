@@ -58,10 +58,11 @@ public class Client {
                 gc.modificaXYcarro(lettera, x, y);
             }
             else if(messVett.length == 4) {
+                 String direziobneSparo = messVett[0];
                 String lettera = messVett[1];
                 String x = messVett[2];
                 String y = messVett[3];
-                gc.inizializzaSparo(lettera, Integer.parseInt(x), Integer.parseInt(y));
+                gc.inizializzaSparo(direziobneSparo,lettera, Integer.parseInt(x), Integer.parseInt(y));
             }
         }
     }
