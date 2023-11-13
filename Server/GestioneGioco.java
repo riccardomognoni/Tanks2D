@@ -42,10 +42,10 @@ public class GestioneGioco extends JPanel {
         for(int i = 0; i < this.listaCarri.size(); i++) {
             if(this.listaCarri.get(i).letteraCarro.equals(lettera)) {
                 int posIniSparoX = this.listaCarri.get(i).xGiocatore;
-                posIniSparoX = calcolaPosizioneXIniSparo(this.listaCarri.get(i).direzioneCorrente, posIniSparoX);
                 int posIniSparoY = this.listaCarri.get(i).yGiocatore;
-                posIniSparoY = calcolaPosizioneYIniSparo(this.listaCarri.get(i).direzioneCorrente, posIniSparoY);
-                posIniSparo = this.listaCarri.get(i).direzioneCorrente + ";" + this.listaCarri.get(i).letteraCarro + ";" + posIniSparoX + ";" + posIniSparoY; 
+                String posAggiornata = calcolaPosizioneIniSparo(this.listaCarri.get(i).direzioneCorrente, posIniSparoX, posIniSparoY);
+                String[] posAggiornataSplit = posAggiornata.split(";");
+                posIniSparo = this.listaCarri.get(i).direzioneCorrente + ";" + this.listaCarri.get(i).letteraCarro + ";" + posAggiornataSplit[0] + ";" + posAggiornataSplit[1]; 
             }
         }
         return posIniSparo;
@@ -69,32 +69,24 @@ public class GestioneGioco extends JPanel {
         }
         return messaggioClient;
     }
-    public int calcolaPosizioneXIniSparo(String direzione, int posizioneXini) {
-        int posizioneAggiornata = posizioneXini;
+    public String calcolaPosizioneIniSparo(String direzione, int posIniSparoX, int posIniSparoY) {
+        int posizioneAggiornataX = posIniSparoX;
+        int posizioneAggiornataY = posIniSparoY;
         if(direzione.equals("W")) {
-            posizioneAggiornata += DIFF_X_SPARO;
+            posizioneAggiornataX += DIFF_X_SPARO;
+            posizioneAggiornataY += DIFF_Y_SPARO - 25;
         } else if(direzione.equals("A")) {
-            posizioneAggiornata += DIFF_X_SPARO - DIFF_X_SPARO_SXDX;
+            posizioneAggiornataX += DIFF_X_SPARO - DIFF_X_SPARO_SXDX;
+            posizioneAggiornataY += DIFF_Y_SPARO + 5;
         }  else if(direzione.equals("S")) {
-            posizioneAggiornata += DIFF_X_SPARO;
+            posizioneAggiornataX += DIFF_X_SPARO;
+            posizioneAggiornataY += DIFF_Y_SPARO + 25;
         }
         else if(direzione.equals("D")) {
-            posizioneAggiornata += DIFF_X_SPARO + DIFF_X_SPARO_SXDX;
+            posizioneAggiornataX += DIFF_X_SPARO + DIFF_X_SPARO_SXDX;
+            posizioneAggiornataY += DIFF_Y_SPARO + 5;
         }
-        return posizioneAggiornata;
-    }
-    public int calcolaPosizioneYIniSparo(String direzione, int posizioneYini) {
-        int posizioneAggiornata = posizioneYini;
-        if(direzione.equals("W")) {
-            posizioneAggiornata += DIFF_Y_SPARO - 25;
-        } else if(direzione.equals("A")) {
-            posizioneAggiornata += DIFF_Y_SPARO + 5;
-        }  else if(direzione.equals("S")) {
-            posizioneAggiornata += DIFF_Y_SPARO + 25;
-        }
-        else if(direzione.equals("D")) {
-            posizioneAggiornata += DIFF_Y_SPARO + 5;
-        }
+        String posizioneAggiornata = posizioneAggiornataX + ";" + posizioneAggiornataY;
         return posizioneAggiornata;
     }
 }
