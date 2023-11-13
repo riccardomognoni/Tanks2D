@@ -12,6 +12,7 @@ public class GestioneGioco extends JPanel {
     final static int HEIGH_PUNTEGGIO = 600;
     final static int DIFF_Y_SPARO = 15;
     final static int DIFF_X_SPARO = 21;
+    final static int  DIFF_X_SPARO_SXDX = 25;
     final static int X_TITOLO = 655;
     final static int Y_TITOLO = 30;
     final static int delay = 100;
@@ -41,7 +42,9 @@ public class GestioneGioco extends JPanel {
         for(int i = 0; i < this.listaCarri.size(); i++) {
             if(this.listaCarri.get(i).letteraCarro.equals(lettera)) {
                 int posIniSparoX = this.listaCarri.get(i).xGiocatore;
+                posIniSparoX = calcolaPosizioneXIniSparo(this.listaCarri.get(i).direzioneCorrente, posIniSparoX);
                 int posIniSparoY = this.listaCarri.get(i).yGiocatore;
+                posIniSparoY = calcolaPosizioneYIniSparo(this.listaCarri.get(i).direzioneCorrente, posIniSparoY);
                 posIniSparo = this.listaCarri.get(i).direzioneCorrente + ";" + this.listaCarri.get(i).letteraCarro + ";" + posIniSparoX + ";" + posIniSparoY; 
             }
         }
@@ -66,5 +69,32 @@ public class GestioneGioco extends JPanel {
         }
         return messaggioClient;
     }
-    
+    public int calcolaPosizioneXIniSparo(String direzione, int posizioneXini) {
+        int posizioneAggiornata = posizioneXini;
+        if(direzione.equals("W")) {
+            posizioneAggiornata += DIFF_X_SPARO;
+        } else if(direzione.equals("A")) {
+            posizioneAggiornata += DIFF_X_SPARO - DIFF_X_SPARO_SXDX;
+        }  else if(direzione.equals("S")) {
+            posizioneAggiornata += DIFF_X_SPARO;
+        }
+        else if(direzione.equals("D")) {
+            posizioneAggiornata += DIFF_X_SPARO + DIFF_X_SPARO_SXDX;
+        }
+        return posizioneAggiornata;
+    }
+    public int calcolaPosizioneYIniSparo(String direzione, int posizioneYini) {
+        int posizioneAggiornata = posizioneYini;
+        if(direzione.equals("W")) {
+            posizioneAggiornata += DIFF_Y_SPARO - 25;
+        } else if(direzione.equals("A")) {
+            posizioneAggiornata += DIFF_Y_SPARO + 5;
+        }  else if(direzione.equals("S")) {
+            posizioneAggiornata += DIFF_Y_SPARO + 25;
+        }
+        else if(direzione.equals("D")) {
+            posizioneAggiornata += DIFF_Y_SPARO + 5;
+        }
+        return posizioneAggiornata;
+    }
 }

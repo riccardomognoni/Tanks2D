@@ -12,7 +12,7 @@ public class Carro {
         this.xGiocatore = xIniziale;
         this.yGiocatore = yIniziale;
         this.letteraCarro = _letteraCarro;
-        this.direzioneCorrente="";
+        this.direzioneCorrente="W";
     }
 
     public String muoviCarro(String direzione){
