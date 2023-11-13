@@ -8,6 +8,8 @@ import javax.swing.*;
 public class GestioneGioco {
     gestioneBlocchi gestioneBl;
     List<Carro> listaCarri;
+    int indiceSparoAttuale;
+    boolean bloccoColpitoCorrente;
     final static int WIDTH_PUNTEGGIO = 140;
     final static int HEIGH_PUNTEGGIO = 600;
     final static int DIFF_Y_SPARO = 15;
@@ -19,6 +21,7 @@ public class GestioneGioco {
     public GestioneGioco() throws IOException { 
         gestioneBl = new gestioneBlocchi();
         this.listaCarri = new ArrayList();
+        this.indiceSparoAttuale = -1;
     } 
     public void addClientCarro(Carro clientCarro) {
         this.listaCarri.add(clientCarro);
@@ -27,13 +30,25 @@ public class GestioneGioco {
     public void controllaSeColpito(Sparo sparo) {
         //ciclo for che controlla se la X del colpo è nell'intervallo della X del carro e stessa cosa per Y
         //con gestione blocchi controllo la x (forse posso riutilizzare il metodo)
+        
         for(int i = 0; i < this.listaCarri.size(); i++) {
             //controllo che il carro colpito non sia lo stesso che ha sparato il colpo
             //prima di scalare la vita devo controllare che non ci sia un blocco davanti
             if(!(this.listaCarri.get(i).letteraCarro.equals(sparo.letteraCarro))) {
-                if(sparo.XSparo<=this.listaCarri.get(i).xGiocatore+25 && sparo.XSparo>=this.listaCarri.get(i).xGiocatore-25) {
-                    if(sparo.YSparo<=this.listaCarri.get(i).yGiocatore+25 && sparo.YSparo>=this.listaCarri.get(i).yGiocatore-25) {
-                        this.listaCarri.get(i).vite--;
+                //controllo se colpisce un blocco, altrimenti:
+                //dovrò poi comunicare al client la nuova disp. dei blocchi
+                //controllo se lo sparo attuale ha già colpito o un blocco o se non l'ha ancora fatto se l'ha colpito ora
+                bloccoColpitoCorrente = gestioneBl.controllaColpitoBlocco(sparo);
+                if(bloccoColpitoCorrente == false) {
+                    if(sparo.XSparo<=this.listaCarri.get(i).xGiocatore+25 && sparo.XSparo>=this.listaCarri.get(i).xGiocatore-25) {
+                        if(sparo.YSparo<=this.listaCarri.get(i).yGiocatore+25 && sparo.YSparo>=this.listaCarri.get(i).yGiocatore-25) {
+                            //controllo che lo stesso sparo possa togliere una sola vita al carro
+                            if(sparo.indiceSparo != indiceSparoAttuale) {
+                                this.listaCarri.get(i).vite--;
+                                indiceSparoAttuale = sparo.indiceSparo;
+                            }
+                            System.out.println("vite di " + this.listaCarri.get(i).letteraCarro + " " + this.listaCarri.get(i).vite);
+                        }
                     }
                 }
             }
@@ -101,4 +116,5 @@ public class GestioneGioco {
         String posizioneAggiornata = posizioneAggiornataX + ";" + posizioneAggiornataY;
         return posizioneAggiornata;
     }
+
 }

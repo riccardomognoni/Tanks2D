@@ -12,7 +12,9 @@ public class gestioneBlocchi {
     int bloccoPresente[] = new int[39]; //indica se il blocco è ancora presente o meno
     int vecchiaXcarro = 0;
     int vecchiaYcarro = 0;
+    int indiceBloccoColpito;
     public gestioneBlocchi() throws IOException {
+        this.indiceBloccoColpito = -1;
 		for(int i=0; i< bloccoPresente.length;i++)
 		{
 			bloccoPresente[i] = 1;
@@ -35,6 +37,22 @@ public class gestioneBlocchi {
         }
         this.vecchiaXcarro = carro.xGiocatore;
         this.vecchiaYcarro = carro.yGiocatore;
+        return false;
+    }
+    public boolean controllaColpitoBlocco(Sparo sparo) {
+        for(int i = 0; i < this.posXblocchi.length; i++) {
+            if(sparo.XSparo<= this.posXblocchi[i] + SPESSORE_BLOCCO && sparo.XSparo >= this.posXblocchi[i]-SPESSORE_BLOCCO) {
+                if(sparo.YSparo<= this.posYblocchi[i] + SPESSORE_BLOCCO && sparo.YSparo>= this.posYblocchi[i]-SPESSORE_BLOCCO) {
+                    //il blocco è stato distrutto, dovrò poi comunicare al client la nuova disp. dei blocchi
+                    if(sparo.indiceSparo != indiceBloccoColpito && bloccoPresente[i] == 1) {
+                        bloccoPresente[i] = 0;
+                        System.out.println("blocco colpito");
+                        indiceBloccoColpito = sparo.indiceSparo;
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
     }
 }

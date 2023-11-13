@@ -16,6 +16,7 @@ public class GestioneGioco extends JPanel {
     GestioneBlocchi gestioneBl;
     List<Carro> listaCarri;
     List<Sparo> listaSpari;
+    int indiceSparo = 0;
     final static int WIDTH_PUNTEGGIO = 140;
     final static int HEIGH_PUNTEGGIO = 600;
     final static int X_TITOLO = 655;
@@ -102,7 +103,8 @@ public class GestioneGioco extends JPanel {
         }
     }
     public void inizializzaSparo(String direzione,String lettera, int iniX, int iniY, Messaggio comServer) {
-        Sparo sparo = new Sparo(direzione,lettera, iniX, iniY, comServer);
+        Sparo sparo = new Sparo(direzione,lettera, iniX, iniY, comServer, indiceSparo);
+        indiceSparo++;
         this.listaSpari.add(sparo);
     }
     public Carro inzializzaCarroClient(String lettera) {

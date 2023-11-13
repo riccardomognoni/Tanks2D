@@ -34,8 +34,7 @@ public class ThreadClient implements Runnable {
 
             while (true) {
                 String comando = comunicazioneClient.leggiMessaggioClient(inputStream);
-                System.out.println("Il server riceve: " + comando);
-
+                //System.out.println("Il server riceve: " + comando);
                 if (comando.equals("sincronizza")) {
                     comunicazioneClient.inviaBlocchiClient(comunicazioneClient, outputStream, gc);
                     if (indiceLettera < 2) {
@@ -50,11 +49,12 @@ public class ThreadClient implements Runnable {
                 }
                 else {
                     String[] comandoSplit = comando.split(";");
-                    if(comandoSplit.length == 3) {
+                    if(comandoSplit.length == 4) {
                         String lettera = comandoSplit[0];
-                        int posXsparo = Integer.parseInt(comandoSplit[1]);
-                        int posYsparo = Integer.parseInt(comandoSplit[2]);
-                        Sparo sp = new Sparo(lettera, posXsparo, posYsparo);
+                        int indiceSparo = Integer.parseInt(comandoSplit[1]);
+                        int posXsparo = Integer.parseInt(comandoSplit[2]);
+                        int posYsparo = Integer.parseInt(comandoSplit[3]);
+                        Sparo sp = new Sparo(lettera, indiceSparo, posXsparo, posYsparo);
                         gc.controllaSeColpito(sp);
                     }
                 }
@@ -92,5 +92,7 @@ public class ThreadClient implements Runnable {
     public void muoviCarro(String comando) {
         gc.muoviCarro(comando.substring(0, 1), comando.substring(1, 2));
     }
-
+    public void inviaViteClient(String comando, PrintWriter writer) {
+        comunicazioneClient.inviaClientString(writer, comando);
+    }
 }

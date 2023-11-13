@@ -55,8 +55,9 @@ public class Messaggio {
     }
 
     public void inviaBlocchiClient(Messaggio comunicazioneClient, OutputStream outputStream, GestioneGioco gc)
-            throws IOException {
+        throws IOException {
         gestioneBlocchi gb = gc.gestioneBl;
+        
         int[] posXblocchi = gb.posXblocchi;
         int[] posYblocchi = gb.posYblocchi;
 
