@@ -14,7 +14,7 @@ public class ThreadClient implements Runnable {
     private final static int SYNC_DELAY = 100;
 
     public ThreadClient(Messaggio comunicazioneClient, Socket socket, GestioneGioco gc, int indiceLettera,
-            String[] lettere, int[] posIniGiocatoriX, int[] posIniGiocatoriY) {
+        String[] lettere, int[] posIniGiocatoriX, int[] posIniGiocatoriY) {
         this.comunicazioneClient = comunicazioneClient;
         this.clientSocket = socket;
         this.gc = gc;
@@ -39,19 +39,26 @@ public class ThreadClient implements Runnable {
                 if (comando.equals("sincronizza")) {
                     comunicazioneClient.inviaBlocchiClient(comunicazioneClient, outputStream, gc);
                     if (indiceLettera < 2) {
-                        inviaLetteraPosizione(writer, lettere[indiceLettera], posIniGiocatoriX[indiceLettera],
-                                posIniGiocatoriY[indiceLettera]);
-                        indiceLettera = (indiceLettera == 0 || indiceLettera == 2) ? indiceLettera + 1
-                                : indiceLettera - 1;
-                        inviaLetteraPosizione(writer, lettere[indiceLettera], posIniGiocatoriX[indiceLettera],
-                                posIniGiocatoriY[indiceLettera]);
+                        inviaLetteraPosizione(writer, lettere[indiceLettera], posIniGiocatoriX[indiceLettera], posIniGiocatoriY[indiceLettera]);
+                        indiceLettera = (indiceLettera == 0 || indiceLettera == 2) ? indiceLettera + 1 : indiceLettera - 1;
+                        inviaLetteraPosizione(writer, lettere[indiceLettera], posIniGiocatoriX[indiceLettera], posIniGiocatoriY[indiceLettera]);
                     }
                 } else if (comando.length() == 2 && "WASD".contains(comando.substring(1, 2))) {
                     muoviCarro(comando);
                 } else if (comando.length() == 2 && comando.substring(1, 2).equals("M")) {
                     inizializzaSparo(comando, writer);
                 }
-
+                else {
+                    String[] comandoSplit = comando.split(";");
+                    if(comandoSplit.length == 3) {
+                        String lettera = comandoSplit[0];
+                        int posXsparo = Integer.parseInt(comandoSplit[1]);
+                        int posYsparo = Integer.parseInt(comandoSplit[2]);
+                        Sparo sp = new Sparo(lettera, posXsparo, posYsparo);
+                        gc.controllaSeColpito(sp);
+                    }
+                }
+                writer.flush();
                 impostaTimer(timer, writer);
             }
         } catch (IOException e) {

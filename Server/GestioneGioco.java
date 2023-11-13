@@ -5,7 +5,7 @@ import javax.swing.*;
 
 //CLASSE PER LA GESTIONE DEL GIOCO DA PARTE DEL SERVER
 //faccio un solo metodo per il disegna che ridisegna tutto
-public class GestioneGioco extends JPanel {
+public class GestioneGioco {
     gestioneBlocchi gestioneBl;
     List<Carro> listaCarri;
     final static int WIDTH_PUNTEGGIO = 140;
@@ -18,15 +18,26 @@ public class GestioneGioco extends JPanel {
     final static int delay = 100;
     public GestioneGioco() throws IOException { 
         gestioneBl = new gestioneBlocchi();
-		setFocusable(true);
         this.listaCarri = new ArrayList();
     } 
     public void addClientCarro(Carro clientCarro) {
         this.listaCarri.add(clientCarro);
     }
-    //controllo se il tank è colpito
-    public void controllaSeColpito() {
-
+    //controllo se il tank o blocco è colpito
+    public void controllaSeColpito(Sparo sparo) {
+        //ciclo for che controlla se la X del colpo è nell'intervallo della X del carro e stessa cosa per Y
+        //con gestione blocchi controllo la x (forse posso riutilizzare il metodo)
+        for(int i = 0; i < this.listaCarri.size(); i++) {
+            //controllo che il carro colpito non sia lo stesso che ha sparato il colpo
+            //prima di scalare la vita devo controllare che non ci sia un blocco davanti
+            if(!(this.listaCarri.get(i).letteraCarro.equals(sparo.letteraCarro))) {
+                if(sparo.XSparo<=this.listaCarri.get(i).xGiocatore+25 && sparo.XSparo>=this.listaCarri.get(i).xGiocatore-25) {
+                    if(sparo.YSparo<=this.listaCarri.get(i).yGiocatore+25 && sparo.YSparo>=this.listaCarri.get(i).yGiocatore-25) {
+                        this.listaCarri.get(i).vite--;
+                    }
+                }
+            }
+        }
     }
     //metodo principale che avvia il gioco 
     public void Gioca() {
@@ -69,6 +80,7 @@ public class GestioneGioco extends JPanel {
         }
         return messaggioClient;
     }
+    //calcolo la posizione iniziale dello sparo sapendo la x e y ritornata dal server e la direzione del carro
     public String calcolaPosizioneIniSparo(String direzione, int posIniSparoX, int posIniSparoY) {
         int posizioneAggiornataX = posIniSparoX;
         int posizioneAggiornataY = posIniSparoY;

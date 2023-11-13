@@ -7,12 +7,14 @@ public class Carro {
     public int xGiocatore;
     public int yGiocatore;
     public String direzioneCorrente;
+    public int vite;
     public Carro(String _urlCarro, String _letteraCarro, int xIniziale, int yIniziale) {
         this.urlCarro = _urlCarro;
         this.xGiocatore = xIniziale;
         this.yGiocatore = yIniziale;
         this.letteraCarro = _letteraCarro;
         this.direzioneCorrente="W";
+        this.vite = 3;
     }
 
     public String muoviCarro(String direzione){

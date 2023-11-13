@@ -63,11 +63,14 @@ public class GestioneGioco extends JPanel {
         super.paintComponent(g);
         disegnaSfondoGraphics(g);
         disegnaGiocatori(g);
-        disegnaSpari(g);
+        try {
+            disegnaSpari(g);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         try {
             disegnaBlocchi(g);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -78,7 +81,7 @@ public class GestioneGioco extends JPanel {
             giocatore.paintIcon(this, g, listaCarri.get(i).xGiocatore, listaCarri.get(i).yGiocatore);
         }
     }
-    public void disegnaSpari(Graphics g) {
+    public void disegnaSpari(Graphics g) throws IOException {
         for(int i = 0; i < listaSpari.size(); i++) {
             ImageIcon sparo = new ImageIcon("images/sparo.png");
             sparo.paintIcon(this, g, listaSpari.get(i).XSparo, listaSpari.get(i).YSparo);
@@ -98,8 +101,8 @@ public class GestioneGioco extends JPanel {
             }
         }
     }
-    public void inizializzaSparo(String direzione,String lettera, int iniX, int iniY) {
-        Sparo sparo = new Sparo(direzione,lettera, iniX, iniY);
+    public void inizializzaSparo(String direzione,String lettera, int iniX, int iniY, Messaggio comServer) {
+        Sparo sparo = new Sparo(direzione,lettera, iniX, iniY, comServer);
         this.listaSpari.add(sparo);
     }
     public Carro inzializzaCarroClient(String lettera) {
