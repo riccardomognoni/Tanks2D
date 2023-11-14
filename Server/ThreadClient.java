@@ -57,8 +57,7 @@ public class ThreadClient implements Runnable {
                         Sparo sp = new Sparo(lettera, indiceSparo, posXsparo, posYsparo);
                         //se un blocco è stato colpito termino lo sparo
                         boolean bloccoColpito = gc.controllaSeColpito(sp);
-                        boolean sparoUscitaFinestra = gc.controllaCollisioneSparoBordi(sp);
-                        if(bloccoColpito == true || sparoUscitaFinestra == true) {
+                        if(bloccoColpito == true) {
                             comunicazioneClient.inviaClientString(writer, "T" + ";" + indiceSparo);
                         }  
                     }

@@ -10,8 +10,6 @@ public class GestioneGioco {
     List<Carro> listaCarri;
     int indiceSparoAttuale;
     boolean bloccoColpitoCorrente;
-    final static int WIDTH_FINESTRA_SPARO = 630;
-    final static int HEIGHT_FINESTRA_SPARO =600;
     final static int WIDTH_PUNTEGGIO = 140;
     final static int HEIGH_PUNTEGGIO = 600;
     final static int DIFF_Y_SPARO = 15;
@@ -30,10 +28,15 @@ public class GestioneGioco {
     }
     //controllo se il tank o blocco è colpito
     public boolean controllaSeColpito(Sparo sparo) {
+        //ciclo for che controlla se la X del colpo è nell'intervallo della X del carro e stessa cosa per Y
+        //con gestione blocchi controllo la x (forse posso riutilizzare il metodo)
+        
         for(int i = 0; i < this.listaCarri.size(); i++) {
+            //controllo che il carro colpito non sia lo stesso che ha sparato il colpo
+            //prima di scalare la vita devo controllare che non ci sia un blocco davanti
             if(!(this.listaCarri.get(i).letteraCarro.equals(sparo.letteraCarro))) {
                 bloccoColpitoCorrente = gestioneBl.controllaColpitoBlocco(sparo);
-                
+                //se ho colpito il blocco devo terminare lo sparo nel client
                 if(bloccoColpitoCorrente == true) {
                     return true;
                 }
@@ -119,12 +122,5 @@ public class GestioneGioco {
         String posizioneAggiornata = posizioneAggiornataX + ";" + posizioneAggiornataY;
         return posizioneAggiornata;
     }
-    public boolean controllaCollisioneSparoBordi(Sparo sparo) {
-        if(sparo.XSparo > 0 && sparo.XSparo < WIDTH_FINESTRA_SPARO) {
-            if(sparo.YSparo > 0 && sparo.YSparo < HEIGHT_FINESTRA_SPARO) {
-                return false;
-            }
-        }
-        return true;
-    }
+
 }

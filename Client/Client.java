@@ -17,7 +17,7 @@ public class Client {
     static boolean primaLettera = true;
     public static void main(String[] args) throws SAXException, IOException, ParserConfigurationException {
         comunicazioneServer = new Messaggio();
-        finestraGioco schermataGioco = new finestraGioco();
+        finestraGrafica schermataGioco = new finestraGrafica();
 
         //MI SINCRONIZZO
         comunicazioneServer.inviaServer("sincronizza");
@@ -55,11 +55,11 @@ public class Client {
                 gc.modificaXYcarro(lettera, x, y);
             }
             else if(messVett.length == 4) {
-                 String direzioneSparo = messVett[0];
+                 String direziobneSparo = messVett[0];
                 String lettera = messVett[1];
                 String x = messVett[2];
                 String y = messVett[3];
-                gc.inizializzaSparo(direzioneSparo,lettera, Integer.parseInt(x), Integer.parseInt(y), comunicazioneServer);
+                gc.inizializzaSparo(direziobneSparo,lettera, Integer.parseInt(x), Integer.parseInt(y), comunicazioneServer);
             }
             else if(messVett.length == 2) {
                 int indiceSparoTerminato = Integer.parseInt(messVett[1]);
@@ -67,4 +67,6 @@ public class Client {
             }
         }
     }
+    
+    
 }
