@@ -8,6 +8,8 @@ public class gestioneBlocchi {
     int posXblocchi[] = {0,50,100,550,200,300,350,450,550,150,150,450,550,250,50,100,150,550,250,350,450,550,50,250,350,550,50,150,250,300,350,550,50,150,250,200,450,550,50};
     int posYblocchi[] = {150,150,150,50,150,100,100,100,100,50,200,200,200,250,300,300,300,100,350,100,350,350,400,400,400,400,450,450,450,450,300,450,500,500,500,200,200,500,550};
     final static int SPESSORE_BLOCCO = 45;
+    final static int WIDTH_FINESTRA = 603;
+    final static int HEIGHT_FINESTRA =550;
     ImageIcon bloccoDistruggibile;
     int bloccoPresente[] = new int[39]; //indica se il blocco è ancora presente o meno
     int vecchiaXcarro = 0;
@@ -21,8 +23,18 @@ public class gestioneBlocchi {
 		}
     }
     //controllo se il colpo ha colpito il blocco
-    public void controlloCollisioneColpo() {
-
+    public boolean controllaCollisioneBordi(Carro carro) {
+        if(carro.xGiocatore < 0 || carro.xGiocatore > WIDTH_FINESTRA) {
+            carro.xGiocatore = this.vecchiaXcarro;
+            carro.yGiocatore = this.vecchiaYcarro;
+            return true;
+        }
+        if(carro.yGiocatore < 0 || carro.yGiocatore > HEIGHT_FINESTRA) {
+            carro.xGiocatore = this.vecchiaXcarro;
+            carro.yGiocatore = this.vecchiaYcarro;
+            return true;
+        }
+        return false;
     }
     //controllo se il client fa collisione con i blocchi
     public boolean controllaCollisioneBlocchi(Carro carro) {

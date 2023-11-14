@@ -82,8 +82,9 @@ public class GestioneGioco {
         for(int i=0;i<listaCarri.size();i++){
             if(listaCarri.get(i).letteraCarro.equals(carro)){
                 //controllo se il movimento è valido
-                boolean collisione = this.gestioneBl.controllaCollisioneBlocchi(listaCarri.get(i));
-                if(collisione == false) {
+                boolean collisioneBordi = this.gestioneBl.controllaCollisioneBordi(listaCarri.get(i));
+                boolean collisioneBlocchi = this.gestioneBl.controllaCollisioneBlocchi(listaCarri.get(i));
+                if(collisioneBlocchi == false && collisioneBordi == false) {
                     //messaggioClient = nuova posizione del client
                     messaggioClient = listaCarri.get(i).muoviCarro(direzione);
                     System.out.println(listaCarri.get(i).xGiocatore);

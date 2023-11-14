@@ -72,7 +72,6 @@ public class Client {
         objGrafica.setBounds(10, 10, 800, 630);
 		objGrafica.setTitle("Giocatore Carri armati 2D");	
         objGrafica.setResizable(false);
-		
 		objGrafica.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		objGrafica.add(gc);
