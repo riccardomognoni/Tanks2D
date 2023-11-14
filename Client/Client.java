@@ -1,3 +1,4 @@
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
@@ -11,15 +12,12 @@ public class Client {
     //lettera assegnata al carro
     static String letteraGiocatore = "";
     static Carro carroPlayer;
-    public static String ip;
-    public static int porta;
-    static DatagramSocket socket;
     public static GestioneBlocchi gb;
     static Messaggio comunicazioneServer;
     static boolean primaLettera = true;
     public static void main(String[] args) throws SAXException, IOException, ParserConfigurationException {
         comunicazioneServer = new Messaggio();
-        JFrame objGrafica = new JFrame();
+        finestraGioco schermataGioco = new finestraGioco();
 
         //MI SINCRONIZZO
         comunicazioneServer.inviaServer("sincronizza");
@@ -28,7 +26,7 @@ public class Client {
         gb = comunicazioneServer.riceviBlocchi();
         GestioneGioco gc = new GestioneGioco(gb);
         
-        //ottengo i dati dei carri
+        //OTTENGO I DATI INIZIALI DEI CARRI
         for(int i = 0; i < 2; i++) {
             //RICEVO LA LETTERA DEL CLIENT GIOCATORE DAL SERVER
             String _letteraCarro = comunicazioneServer.leggiLetteraCarro();
@@ -36,17 +34,16 @@ public class Client {
                 letteraGiocatore = _letteraCarro;
                 primaLettera = false;
             }
-            //RICEVO LA POSIZIONE INIZIALE (X E Y) DEL CARRO DAL SERVER - X
+            //RICEVO LA POSIZIONE INIZIALE (X E Y) DEL CARRO DAL SERVER
             int posizioneClient[] = comunicazioneServer.leggiPosizioneServer();
             gc.addCarro(_letteraCarro, posizioneClient[0], posizioneClient[1]);
         }
         carroPlayer = gc.inzializzaCarroClient(letteraGiocatore);
-        disegnaFinestra(objGrafica, gc);
-        objGrafica.setVisible(true);
+        schermataGioco.disegnaFinestra(gc);
         //AGGIUNGO IL KEY LISTENER
         InputKey kl = new InputKey(comunicazioneServer, carroPlayer);
-        //CONTROLLO SE IL PLAYER HA CLICCATO UN TASTO
-        inizializzaListener(objGrafica, kl);
+        schermataGioco.inizializzaListener(kl);
+        
         //FACCIO CICLO INFINITO CHE LEGGE
         while(true) {
             String messaggio = comunicazioneServer.riceviMessaggio();
@@ -58,11 +55,11 @@ public class Client {
                 gc.modificaXYcarro(lettera, x, y);
             }
             else if(messVett.length == 4) {
-                 String direziobneSparo = messVett[0];
+                 String direzioneSparo = messVett[0];
                 String lettera = messVett[1];
                 String x = messVett[2];
                 String y = messVett[3];
-                gc.inizializzaSparo(direziobneSparo,lettera, Integer.parseInt(x), Integer.parseInt(y), comunicazioneServer);
+                gc.inizializzaSparo(direzioneSparo,lettera, Integer.parseInt(x), Integer.parseInt(y), comunicazioneServer);
             }
             else if(messVett.length == 2) {
                 int indiceSparoTerminato = Integer.parseInt(messVett[1]);
@@ -70,23 +67,4 @@ public class Client {
             }
         }
     }
-    //CONTROLLO QUALE TASTO E' STATO PREMUTO
-    //DISEGNO LA FINESTRA
-    public static void disegnaFinestra(JFrame objGrafica, GestioneGioco gc) {
-        objGrafica.setBounds(10, 10, 800, 630);
-		objGrafica.setTitle("Giocatore Carri armati 2D");	
-        objGrafica.setResizable(false);
-		objGrafica.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		objGrafica.add(gc);
-		objGrafica.setVisible(true);
-    }
-    public static void inizializzaListener(JFrame objGrafica, InputKey kl) {
-        objGrafica.addKeyListener(kl);
-        objGrafica.setVisible(true);
-        objGrafica.setFocusable(true);
-        objGrafica.requestFocus();
-        objGrafica.requestFocusInWindow();
-    }
-    
 }
