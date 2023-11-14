@@ -64,6 +64,10 @@ public class Client {
                 String y = messVett[3];
                 gc.inizializzaSparo(direziobneSparo,lettera, Integer.parseInt(x), Integer.parseInt(y), comunicazioneServer);
             }
+            else if(messVett.length == 2) {
+                int indiceSparoTerminato = Integer.parseInt(messVett[1]);
+                gc.terminaSparo(indiceSparoTerminato);
+            }
         }
     }
     //CONTROLLO QUALE TASTO E' STATO PREMUTO

@@ -53,11 +53,12 @@ public class gestioneBlocchi {
     }
     public boolean controllaColpitoBlocco(Sparo sparo) {
         for(int i = 0; i < this.posXblocchi.length; i++) {
-            if(sparo.XSparo<= this.posXblocchi[i] + SPESSORE_BLOCCO && sparo.XSparo >= this.posXblocchi[i]-SPESSORE_BLOCCO) {
-                if(sparo.YSparo<= this.posYblocchi[i] + SPESSORE_BLOCCO && sparo.YSparo>= this.posYblocchi[i]-SPESSORE_BLOCCO) {
+            //perchè la xSparo e ySparo sono grandinon è il semplice punto
+            //System.out.println("x sparo " + sparo.XSparo + "y sparo " + sparo.YSparo);
+            if(sparo.XSparo<= this.posXblocchi[i] + 45 && sparo.XSparo >= this.posXblocchi[i] - 11) {
+                if(sparo.YSparo<= this.posYblocchi[i] +SPESSORE_BLOCCO && sparo.YSparo>= this.posYblocchi[i] -20) {
                     //il blocco è stato distrutto, dovrò poi comunicare al client la nuova disp. dei blocchi
-                    if(sparo.indiceSparo != indiceBloccoColpito && bloccoPresente[i] == 1) {
-                        bloccoPresente[i] = 0;
+                    if(sparo.indiceSparo != indiceBloccoColpito) {
                         System.out.println("blocco colpito");
                         indiceBloccoColpito = sparo.indiceSparo;
                         return true;

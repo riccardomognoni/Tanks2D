@@ -115,4 +115,11 @@ public class GestioneGioco extends JPanel {
         }
         return null;
     }
+    public void terminaSparo(int indice) {
+        for(int i = 0; i < this.listaSpari.size(); i++) {
+            if(this.listaSpari.get(i).indiceSparo == indice) {
+                this.listaSpari.remove(i);
+            }
+        }
+    }
 }

@@ -10,6 +10,8 @@ public class GestioneGioco {
     List<Carro> listaCarri;
     int indiceSparoAttuale;
     boolean bloccoColpitoCorrente;
+    final static int WIDTH_FINESTRA_SPARO = 630;
+    final static int HEIGHT_FINESTRA_SPARO =600;
     final static int WIDTH_PUNTEGGIO = 140;
     final static int HEIGH_PUNTEGGIO = 600;
     final static int DIFF_Y_SPARO = 15;
@@ -27,19 +29,15 @@ public class GestioneGioco {
         this.listaCarri.add(clientCarro);
     }
     //controllo se il tank o blocco è colpito
-    public void controllaSeColpito(Sparo sparo) {
-        //ciclo for che controlla se la X del colpo è nell'intervallo della X del carro e stessa cosa per Y
-        //con gestione blocchi controllo la x (forse posso riutilizzare il metodo)
-        
+    public boolean controllaSeColpito(Sparo sparo) {
         for(int i = 0; i < this.listaCarri.size(); i++) {
-            //controllo che il carro colpito non sia lo stesso che ha sparato il colpo
-            //prima di scalare la vita devo controllare che non ci sia un blocco davanti
             if(!(this.listaCarri.get(i).letteraCarro.equals(sparo.letteraCarro))) {
-                //controllo se colpisce un blocco, altrimenti:
-                //dovrò poi comunicare al client la nuova disp. dei blocchi
-                //controllo se lo sparo attuale ha già colpito o un blocco o se non l'ha ancora fatto se l'ha colpito ora
                 bloccoColpitoCorrente = gestioneBl.controllaColpitoBlocco(sparo);
-                if(bloccoColpitoCorrente == false) {
+                
+                if(bloccoColpitoCorrente == true) {
+                    return true;
+                }
+                else {
                     if(sparo.XSparo<=this.listaCarri.get(i).xGiocatore+25 && sparo.XSparo>=this.listaCarri.get(i).xGiocatore-25) {
                         if(sparo.YSparo<=this.listaCarri.get(i).yGiocatore+25 && sparo.YSparo>=this.listaCarri.get(i).yGiocatore-25) {
                             //controllo che lo stesso sparo possa togliere una sola vita al carro
@@ -51,8 +49,12 @@ public class GestioneGioco {
                         }
                     }
                 }
+                //ELIMINO LO SPARO SE IMPATTACOL BLOCO
+                //System.out.println(bloccoColpitoCorrente);
+                //se è true invio al client la posizione sparo
             }
         }
+        return false; 
     }
     //metodo principale che avvia il gioco 
     public void Gioca() {
@@ -87,10 +89,10 @@ public class GestioneGioco {
                 if(collisioneBlocchi == false && collisioneBordi == false) {
                     //messaggioClient = nuova posizione del client
                     messaggioClient = listaCarri.get(i).muoviCarro(direzione);
-                    System.out.println(listaCarri.get(i).xGiocatore);
+                    //System.out.println(listaCarri.get(i).xGiocatore);
                 }
                 else {
-                    System.out.println(listaCarri.get(i).xGiocatore);
+                    //System.out.println(listaCarri.get(i).xGiocatore);
                 }  
             }
         }
@@ -117,5 +119,12 @@ public class GestioneGioco {
         String posizioneAggiornata = posizioneAggiornataX + ";" + posizioneAggiornataY;
         return posizioneAggiornata;
     }
-
+    public boolean controllaCollisioneSparoBordi(Sparo sparo) {
+        if(sparo.XSparo > 0 && sparo.XSparo < WIDTH_FINESTRA_SPARO) {
+            if(sparo.YSparo > 0 && sparo.YSparo < HEIGHT_FINESTRA_SPARO) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

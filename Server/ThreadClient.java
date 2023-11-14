@@ -55,7 +55,12 @@ public class ThreadClient implements Runnable {
                         int posXsparo = Integer.parseInt(comandoSplit[2]);
                         int posYsparo = Integer.parseInt(comandoSplit[3]);
                         Sparo sp = new Sparo(lettera, indiceSparo, posXsparo, posYsparo);
-                        gc.controllaSeColpito(sp);
+                        //se un blocco è stato colpito termino lo sparo
+                        boolean bloccoColpito = gc.controllaSeColpito(sp);
+                        boolean sparoUscitaFinestra = gc.controllaCollisioneSparoBordi(sp);
+                        if(bloccoColpito == true || sparoUscitaFinestra == true) {
+                            comunicazioneClient.inviaClientString(writer, "T" + ";" + indiceSparo);
+                        }  
                     }
                 }
                 writer.flush();
@@ -95,4 +100,5 @@ public class ThreadClient implements Runnable {
     public void inviaViteClient(String comando, PrintWriter writer) {
         comunicazioneClient.inviaClientString(writer, comando);
     }
+    
 }
