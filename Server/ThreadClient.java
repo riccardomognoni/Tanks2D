@@ -36,7 +36,7 @@ public class ThreadClient implements Runnable {
                 String comando = comunicazioneClient.leggiMessaggioClient(inputStream);
                 //System.out.println("Il server riceve: " + comando);
                 if (comando.equals("sincronizza")) {
-                    comunicazioneClient.inviaBlocchiClient(comunicazioneClient, outputStream, gc);
+                    comunicazioneClient.inviaBlocchiClient(writer, gc);
                     if (indiceLettera < 2) {
                         inviaLetteraPosizione(writer, lettere[indiceLettera], posIniGiocatoriX[indiceLettera], posIniGiocatoriY[indiceLettera]);
                         indiceLettera = (indiceLettera == 0 || indiceLettera == 2) ? indiceLettera + 1 : indiceLettera - 1;
@@ -72,7 +72,7 @@ public class ThreadClient implements Runnable {
     }
 
     private void inviaLetteraPosizione(PrintWriter writer, String lettera, int posX, int posY) throws IOException {
-        writer = comunicazioneClient.inviaLetteraClient(comunicazioneClient, writer, lettera);
+        writer = comunicazioneClient.inviaLetteraClient(writer, lettera);
         comunicazioneClient.inviaPosizioneClient(writer, posX, posY);
     }
 

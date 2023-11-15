@@ -28,13 +28,13 @@ public class Client {
         //OTTENGO I DATI INIZIALI DEI CARRI
         for(int i = 0; i < 2; i++) {
             //RICEVO LA LETTERA DEL CLIENT GIOCATORE DAL SERVER
-            String _letteraCarro = comunicazioneServer.leggiLetteraCarro();
+            String _letteraCarro = comunicazioneServer.riceviMessaggio();
             if(primaLettera == true) {
                 letteraGiocatore = _letteraCarro;
                 primaLettera = false;
             }
             //RICEVO LA POSIZIONE INIZIALE (X E Y) DEL CARRO DAL SERVER
-            int posizioneClient[] = comunicazioneServer.leggiPosizioneServer();
+            int[] posizioneClient = comunicazioneServer.leggiPosizioneCarro();
             gc.addCarro(_letteraCarro, posizioneClient[0], posizioneClient[1]);
         }
         carroPlayer = gc.inzializzaCarroClient(letteraGiocatore);

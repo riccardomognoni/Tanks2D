@@ -25,61 +25,40 @@ public class Messaggio {
         this.portClient = _portClient;
     }
 
-    // invia il messaggio al Client
+    //METODI BASE
+    //leggo la richiesta ricevuta dal client
     public String leggiMessaggioClient(InputStream inputStream) throws IOException {
         byte[] buffer = new byte[1024];
         int bytesRead = inputStream.read(buffer);
         String comando = new String(buffer, 0, bytesRead);
-
         return comando;
     }
 
-    public void inviaClientBytes(OutputStream out, byte[] bytes) throws IOException {
-        out.write(bytes);
-    }
-
-    public PrintWriter inviaLetteraClient(Messaggio comunicazioneClient, PrintWriter writer, String lettera)
-            throws IOException {
-        String csvData = lettera;
-        writer.println(csvData);
-        return writer;
-    }
-
-    public void inviaPosizioneClient(PrintWriter writer, int posizioneXClient, int posizioneYClient) {
-        String combinedData = posizioneXClient + "," + posizioneYClient;
-        writer.println(combinedData);
-    }
-
+    //invio al client il comando
     public void inviaClientString(PrintWriter writer, String messaggio) {
         writer.println(messaggio);
     }
 
-    public void inviaBlocchiClient(Messaggio comunicazioneClient, OutputStream outputStream, GestioneGioco gc)
-        throws IOException {
-        gestioneBlocchi gb = gc.gestioneBl;
-        
-        int[] posXblocchi = gb.posXblocchi;
-        int[] posYblocchi = gb.posYblocchi;
-
-        byte[] posXBytes = intArrayToByteArray(posXblocchi);
-        byte[] posYBytes = intArrayToByteArray(posYblocchi);
-
-        comunicazioneClient.inviaClientBytes(outputStream, posXBytes);
-        comunicazioneClient.inviaClientBytes(outputStream, posYBytes);
+    //METODI DERIVATI DAI METODI BASE
+    public PrintWriter inviaLetteraClient(PrintWriter writer, String lettera) {
+        writer.println(lettera);
+        return writer;
     }
 
-    public byte[] intArrayToByteArray(int[] arr) {
-        byte[] result = new byte[arr.length * 4];
-        for (int i = 0; i < arr.length; i++) {
-            ByteBuffer.wrap(result, i * 4, 4).putInt(arr[i]);
-        }
-        return result;
+    public void inviaPosizioneClient(PrintWriter writer, int posizioneXClient, int posizioneYClient) {
+        String comando = posizioneXClient + "," + posizioneYClient;
+        this.inviaClientString(writer, comando);
+    }
+
+    public void inviaBlocchiClient(PrintWriter writer, GestioneGioco gc) {
+        String comando = gc.serializzaBlocchi();
+        this.inviaClientString(writer, comando);
     }
 
     public void inviaListaCarri(PrintWriter writer, GestioneGioco gc) {
         List<Carro> listaCarri = gc.listaCarri;
         for(int i = 0; i < listaCarri.size(); i++) {
-            writer.println(listaCarri.get(i).letteraCarro + ";" + listaCarri.get(i).xGiocatore + ";" + listaCarri.get(i).yGiocatore);
+            this.inviaClientString(writer, listaCarri.get(i).letteraCarro + ";" + listaCarri.get(i).xGiocatore + ";" + listaCarri.get(i).yGiocatore);
         }
     }
 }

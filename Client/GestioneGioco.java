@@ -79,7 +79,7 @@ public class GestioneGioco extends JPanel {
     public void disegnaGiocatori(Graphics g) {
         for(int i = 0; i < listaCarri.size(); i++) {
             ImageIcon giocatore= new ImageIcon(listaCarri.get(i).urlCarro);
-            giocatore.paintIcon(this, g, listaCarri.get(i).xGiocatore, listaCarri.get(i).yGiocatore);
+            giocatore.paintIcon(this, g, listaCarri.get(i).posizioneX, listaCarri.get(i).posizioneY);
         }
     }
     public void disegnaSpari(Graphics g) throws IOException {
@@ -97,8 +97,8 @@ public class GestioneGioco extends JPanel {
         for(int i =0; i < this.listaCarri.size(); i++) {
             Carro carroTmp = this.listaCarri.get(i);
             if(carroTmp.letteraCarro.equals(lettera)) {
-                carroTmp.xGiocatore = Integer.parseInt(x);
-                carroTmp.yGiocatore = Integer.parseInt(y);
+                carroTmp.posizioneX = Integer.parseInt(x);
+                carroTmp.posizioneY = Integer.parseInt(y);
             }
         }
     }

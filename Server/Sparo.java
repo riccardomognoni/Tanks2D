@@ -16,4 +16,5 @@ public class Sparo {
         this.letteraCarro = lettera;
         this.indiceSparo = indiceSparo;
     }
+    
 }

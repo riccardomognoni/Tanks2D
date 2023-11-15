@@ -4,12 +4,13 @@ import java.io.IOException;
 import javax.swing.*;
 
 //CLASSE PER LA GESTIONE DEL GIOCO DA PARTE DEL SERVER
-//faccio un solo metodo per il disegna che ridisegna tutto
 public class GestioneGioco {
-    gestioneBlocchi gestioneBl;
+    //definizione variabili
+    gestioneFinestra gestioneBl;
     List<Carro> listaCarri;
     int indiceSparoAttuale;
     boolean bloccoColpitoCorrente;
+    //definizione costanti
     final static int WIDTH_FINESTRA_SPARO = 630;
     final static int HEIGHT_FINESTRA_SPARO =600;
     final static int WIDTH_PUNTEGGIO = 140;
@@ -21,63 +22,59 @@ public class GestioneGioco {
     final static int Y_TITOLO = 30;
     final static int delay = 100;
     public GestioneGioco() throws IOException { 
-        gestioneBl = new gestioneBlocchi();
+        gestioneBl = new gestioneFinestra();
         this.listaCarri = new ArrayList();
         this.indiceSparoAttuale = -1;
     } 
+    /**
+     * aggiungo il carro alla lista dei carri
+     * @param clientCarro //carro da aggiungere
+     */
     public void addClientCarro(Carro clientCarro) {
         this.listaCarri.add(clientCarro);
     }
-    //controllo se il tank o blocco è colpito
+    /**
+     * controllo se terminare lo sparo (quando colpisce un blocco o giocatore)
+     * @param sparo //sparo da controllare
+     * @return
+     */
     public boolean controllaSeColpito(Sparo sparo) {
-        for(int i = 0; i < this.listaCarri.size(); i++) {
-            //controllo che il carro colpito non sia lo stesso che ha sparato il colpo
-            //prima di scalare la vita devo controllare che non ci sia un blocco davanti
-            if(!(this.listaCarri.get(i).letteraCarro.equals(sparo.letteraCarro))) {
+        for (Carro carro : listaCarri) {
+            //controllo che il carro colpito non sia lo stesso che ha sparato
+            if (!carro.letteraCarro.equals(sparo.letteraCarro)) {
+                //controllo se il colpo ha colpito un blocco
                 bloccoColpitoCorrente = gestioneBl.controllaColpitoBlocco(sparo);
-                //se ho colpito il blocco devo terminare lo sparo nel client
-                if(bloccoColpitoCorrente == true) {
+                //se ha colpito il blocco termino lo sparo
+                if (bloccoColpitoCorrente) {
+                    return true;
+                //se ha colpito un carro allora termino lo sparo
+                } else if (carro.controllaColpoSuCarro(sparo, indiceSparoAttuale)) {
                     return true;
                 }
-                else {
-                    if(sparo.XSparo<=this.listaCarri.get(i).xGiocatore+25 && sparo.XSparo>=this.listaCarri.get(i).xGiocatore-25) {
-                        if(sparo.YSparo<=this.listaCarri.get(i).yGiocatore+25 && sparo.YSparo>=this.listaCarri.get(i).yGiocatore-25) {
-                            //controllo che lo stesso sparo possa togliere una sola vita al carro
-                            if(sparo.indiceSparo != indiceSparoAttuale) {
-                                this.listaCarri.get(i).vite--;
-                                indiceSparoAttuale = sparo.indiceSparo;
-                            }
-                            System.out.println("vite di " + this.listaCarri.get(i).letteraCarro + " " + this.listaCarri.get(i).vite);
-                        }
-                    }
-                }
-                //ELIMINO LO SPARO SE IMPATTACOL BLOCO
-                //System.out.println(bloccoColpitoCorrente);
-                //se è true invio al client la posizione sparo
             }
         }
-        return false; 
+        //altrimenti non ha colpito nulla e può andare avanti
+        return false;
     }
-    //metodo principale che avvia il gioco 
-    public void Gioca() {
-
-    }
-    //controllo le vite del player
-    public void controllaVite() {
-
-    }
- 
+    /**
+     * inizializzo lo sparo con la posizione inziale (in base alla direzione del carro)
+     * 
+     * @param lettera //lettera del carro di appartenenza
+     * @return
+     */
     public String inizializzaSparo(String lettera) {
         String posIniSparo = "";
+        //scorro tutti i carri per controllare a quale appartiene il colpo
         for(int i = 0; i < this.listaCarri.size(); i++) {
             if(this.listaCarri.get(i).letteraCarro.equals(lettera)) {
-                int posIniSparoX = this.listaCarri.get(i).xGiocatore;
-                int posIniSparoY = this.listaCarri.get(i).yGiocatore;
-                String posAggiornata = calcolaPosizioneIniSparo(this.listaCarri.get(i).direzioneCorrente, posIniSparoX, posIniSparoY);
+                //calcolo la posizione iniziale dello sparo partendo dalla x del tank, dalla sua y e dal verso (WASD) del carro
+                String posAggiornata = calcolaPosizioneIniSparo(this.listaCarri.get(i).direzioneCorrente, this.listaCarri.get(i).xGiocatore, this.listaCarri.get(i).yGiocatore);
                 String[] posAggiornataSplit = posAggiornata.split(";");
+                //comando da inviare al client per inizializzare lo sparo su client
                 posIniSparo = this.listaCarri.get(i).direzioneCorrente + ";" + this.listaCarri.get(i).letteraCarro + ";" + posAggiornataSplit[0] + ";" + posAggiornataSplit[1]; 
             }
         }
+        //ritorno la posizione iniziale dello sparo, da inviare al client
         return posIniSparo;
     }
     //muove il carro nella direzione indicata dal client
@@ -85,40 +82,40 @@ public class GestioneGioco {
         String messaggioClient = "";
         for(int i=0;i<listaCarri.size();i++){
             if(listaCarri.get(i).letteraCarro.equals(carro)){
-                //controllo se il movimento è valido
+                //controllo se il movimento è valido:
+                //- non deve impattare con i bordi
+                //- non deve impattare con i blocchi
                 boolean collisioneBordi = this.gestioneBl.controllaCollisioneBordi(listaCarri.get(i));
                 boolean collisioneBlocchi = this.gestioneBl.controllaCollisioneBlocchi(listaCarri.get(i));
                 if(collisioneBlocchi == false && collisioneBordi == false) {
-                    //messaggioClient = nuova posizione del client
                     messaggioClient = listaCarri.get(i).muoviCarro(direzione);
-                    //System.out.println(listaCarri.get(i).xGiocatore);
                 }
-                else {
-                    //System.out.println(listaCarri.get(i).xGiocatore);
-                }  
             }
         }
         return messaggioClient;
     }
-    //calcolo la posizione iniziale dello sparo sapendo la x e y ritornata dal server e la direzione del carro
-    public String calcolaPosizioneIniSparo(String direzione, int posIniSparoX, int posIniSparoY) {
-        int posizioneAggiornataX = posIniSparoX;
-        int posizioneAggiornataY = posIniSparoY;
+    public int[] calcolaPosizioneIniSparoWASD(String direzione, int posIniSparoX,  int posIniSparoY) {
+        int[] calcoloPosizioni = {-1, -1}; //[0] = x, [1] = y
         if(direzione.equals("W")) {
-            posizioneAggiornataX += DIFF_X_SPARO;
-            posizioneAggiornataY += DIFF_Y_SPARO - 25;
+            calcoloPosizioni[0] = posIniSparoX + DIFF_X_SPARO;
+            calcoloPosizioni[1] += posIniSparoY + (DIFF_Y_SPARO - 25);
         } else if(direzione.equals("A")) {
-            posizioneAggiornataX += DIFF_X_SPARO - DIFF_X_SPARO_SXDX;
-            posizioneAggiornataY += DIFF_Y_SPARO + 5;
+            calcoloPosizioni[0] = posIniSparoX + (DIFF_X_SPARO - DIFF_X_SPARO_SXDX);
+            calcoloPosizioni[1] += posIniSparoY + (DIFF_Y_SPARO + 5);
         }  else if(direzione.equals("S")) {
-            posizioneAggiornataX += DIFF_X_SPARO;
-            posizioneAggiornataY += DIFF_Y_SPARO + 25;
+            calcoloPosizioni[0] = posIniSparoX + DIFF_X_SPARO;
+            calcoloPosizioni[1] += posIniSparoY + (DIFF_Y_SPARO + 25);
         }
         else if(direzione.equals("D")) {
-            posizioneAggiornataX += DIFF_X_SPARO + DIFF_X_SPARO_SXDX;
-            posizioneAggiornataY += DIFF_Y_SPARO + 5;
+            calcoloPosizioni[0] = posIniSparoX + DIFF_X_SPARO + DIFF_X_SPARO_SXDX;
+            calcoloPosizioni[1] += posIniSparoY + (DIFF_Y_SPARO + 5);
         }
-        String posizioneAggiornata = posizioneAggiornataX + ";" + posizioneAggiornataY;
+        return calcoloPosizioni;
+    }
+    //calcolo la posizione iniziale dello sparo sapendo la x e y ritornata dal server e la direzione del carro
+    public String calcolaPosizioneIniSparo(String direzione, int posIniSparoX, int posIniSparoY) {
+        int[] posSparo = calcolaPosizioneIniSparoWASD(direzione, posIniSparoX, posIniSparoY);
+        String posizioneAggiornata = posSparo[0] + ";" + posSparo[1];
         return posizioneAggiornata;
     }
     public boolean controllaCollisioneSparoBordi(Sparo sparo) {
@@ -128,5 +125,9 @@ public class GestioneGioco {
             }
         }
         return true;
+    }
+    public String serializzaBlocchi() {
+        String blocchi = this.gestioneBl.serializzaBlocchi();
+        return blocchi;
     }
 }
