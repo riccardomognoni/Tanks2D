@@ -16,7 +16,6 @@ public class Client {
     static boolean primaLettera = true;
     public static void main(String[] args) throws SAXException, IOException, ParserConfigurationException {
         comunicazioneServer = new Messaggio();
-        finestraGrafica schermataGioco = new finestraGrafica();
 
         //MI SINCRONIZZO
         comunicazioneServer.inviaServer("sincronizza");
@@ -24,7 +23,8 @@ public class Client {
         //RICEVO I BLOCCHI DAL SERVER
         gb = comunicazioneServer.riceviBlocchi();
         GestioneGioco gc = new GestioneGioco(gb);
-        
+        finestraGrafica schermataGioco = new finestraGrafica(gc);
+
         //OTTENGO I DATI INIZIALI DEI CARRI
         for(int i = 0; i < 2; i++) {
             //RICEVO LA LETTERA DEL CLIENT GIOCATORE DAL SERVER
@@ -37,13 +37,13 @@ public class Client {
             int[] posizioneClient = comunicazioneServer.leggiPosizioneCarro();
             gc.addCarro(_letteraCarro, posizioneClient[0], posizioneClient[1]);
         }
-        carroPlayer = gc.inzializzaCarroClient(letteraGiocatore);
-        schermataGioco.disegnaFinestra(gc);
+        carroPlayer = gc.ottieniCarroPlayer(letteraGiocatore);
+        schermataGioco.disegnaFinestra();
         //AGGIUNGO IL KEY LISTENER
-        InputKey kl = new InputKey(comunicazioneServer, carroPlayer);
+        GestioneInput kl = new GestioneInput(comunicazioneServer, carroPlayer);
         schermataGioco.inizializzaListener(kl);
         
-        //FACCIO CICLO INFINITO CHE LEGGE
+        //FACCIO CICLO INFINITO CHE LEGGE I COMANDI E GESTISCE LE OPERAZIONI CONSEGUENTI
         while(true) {
             String messaggio = comunicazioneServer.riceviMessaggio();
             String[] messVett = messaggio.split(";");

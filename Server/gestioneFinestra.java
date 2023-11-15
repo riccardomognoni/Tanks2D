@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+//CLASSE PER LA GESTIONE/CONTROLLO DEI/SUI BLOCCHI E CONTROLLO SUI MARGINI DELLA FINESTRA
 public class gestioneFinestra {
     //pos blocchi distruggibili
     //PROBLEMA IL CLIENT NON LEGGE GLI ULTIMI DUE

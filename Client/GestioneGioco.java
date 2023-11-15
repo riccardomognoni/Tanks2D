@@ -11,88 +11,38 @@ import javax.swing.*;
 import javax.swing.Timer;
 
 //CLASSE PER LA GESTIONE DEL GIOCO DA PARTE DEL SERVER
-//faccio un solo metodo per il disegna che ridisegna tutto
-public class GestioneGioco extends JPanel {
+public class GestioneGioco  {
+    //gestisco la lista dei carri e la lista degli spari oltre che la gestione blocchi
     GestioneBlocchi gestioneBl;
     List<Carro> listaCarri;
     List<Sparo> listaSpari;
     int indiceSparo = 0;
-    final static int WIDTH_PUNTEGGIO = 140;
-    final static int HEIGH_PUNTEGGIO = 600;
-    final static int X_TITOLO = 655;
-    final static int Y_TITOLO = 30;
-    final static int delay = 100;
+    /**
+     * costruttore
+     * @param gb GestioneBlocchi per gestire i blocchi 
+     * @throws IOException
+     */
     public GestioneGioco(GestioneBlocchi gb) throws IOException { 
         gestioneBl = gb;
-		setFocusable(true);
         this.listaCarri = new ArrayList<Carro>();
         this.listaSpari = new ArrayList<Sparo>();
-        //MODIFICARE la lettera
-        //timer con cui viene chiamata la repaint che ridisegna TUTTO
-        Timer timer = new Timer(delay, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                repaint(); 
-            }
-        });
-        timer.start();
     } 
+    /**
+     * creo e aggiungo il carro alla lista carri
+     * @param _letteraCarro
+     * @param posizioneXClient
+     * @param posizioneYClient
+     */
     public void addCarro(String _letteraCarro, int posizioneXClient, int posizioneYClient) {
         Carro carroTmp = new Carro(_letteraCarro, posizioneXClient, posizioneYClient);
         this.listaCarri.add(carroTmp);
     }
-    //disegno lo sfondo usando il parametro graphics 
-    public void disegnaSfondoGraphics(Graphics g) { 
-        //immagine di sfondo
-        ImageIcon imageIcon = new ImageIcon("images/sfondoCampo1.jpg");
-        Image sfondo = imageIcon.getImage();
-        g.drawImage(sfondo, 0, 0, getWidth(), getHeight(), this);
-    
-        //pannello del punteggio
-        g.setColor(Color.GRAY);
-        g.fillRect(650, 0, WIDTH_PUNTEGGIO, HEIGH_PUNTEGGIO);
-    
-        //titolo del pannello del punteggio
-        g.setColor(Color.BLACK); 
-        g.setFont(new Font("Arial", Font.BOLD, 16)); 
-        String titolo = "Punteggio e vite";
-        g.drawString(titolo, X_TITOLO, Y_TITOLO);
-    }
-
-    //per adesso senza keylistener o timer è richiamato una sola volta
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        disegnaSfondoGraphics(g);
-        disegnaGiocatori(g);
-        try {
-            disegnaSpari(g);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            disegnaBlocchi(g);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    //disegna il giocatore
-    public void disegnaGiocatori(Graphics g) {
-        for(int i = 0; i < listaCarri.size(); i++) {
-            ImageIcon giocatore= new ImageIcon(listaCarri.get(i).urlCarro);
-            giocatore.paintIcon(this, g, listaCarri.get(i).posizioneX, listaCarri.get(i).posizioneY);
-        }
-    }
-    public void disegnaSpari(Graphics g) throws IOException {
-        for(int i = 0; i < listaSpari.size(); i++) {
-            ImageIcon sparo = new ImageIcon("images/sparo.png");
-            sparo.paintIcon(this, g, listaSpari.get(i).XSparo, listaSpari.get(i).YSparo);
-            listaSpari.get(i).aggiorna();
-        }
-    }
-    public void disegnaBlocchi(Graphics g) throws IOException {
-        //disegno i blocchi
-		gestioneBl.disegna(this, g);
-    }
+    /**
+     * modifico la x e y del carro dopo che ricevo dal server la posizione validata
+     * @param lettera  lettera del carro di cui modificare la posizione
+     * @param x la sua x
+     * @param y la sua y
+     */
     public void modificaXYcarro(String lettera, String x, String y) {
         for(int i =0; i < this.listaCarri.size(); i++) {
             Carro carroTmp = this.listaCarri.get(i);
@@ -102,12 +52,25 @@ public class GestioneGioco extends JPanel {
             }
         }
     }
+    /**
+     * inizializzo lo sparo, creanfolo e aggiungendolo nella lista degli spari
+     * @param direzione direzione dello sparo
+     * @param lettera la sua lettera
+     * @param iniX la x iniziale dello sparo prima che si muova
+     * @param iniY la y inziale
+     * @param comServer l'oggetto per gestire la comunicazione con il server
+     */
     public void inizializzaSparo(String direzione,String lettera, int iniX, int iniY, Messaggio comServer) {
         Sparo sparo = new Sparo(direzione,lettera, iniX, iniY, comServer, indiceSparo);
         indiceSparo++;
         this.listaSpari.add(sparo);
     }
-    public Carro inzializzaCarroClient(String lettera) {
+    /**
+     * ottengo il carro del giocatore dalla lista dei carri creata all'inzio
+     * @param lettera lettera del carro player
+     * @return
+     */
+    public Carro ottieniCarroPlayer(String lettera) {
         for(int i = 0; i < this.listaCarri.size(); i++) {
             if(listaCarri.get(i).letteraCarro.equals(lettera)) {
                 return listaCarri.get(i);
@@ -115,6 +78,10 @@ public class GestioneGioco extends JPanel {
         }
         return null;
     }
+    /**
+     * elimino lo sparo dalla lista e conseguentemente dalla visualizzazione
+     * @param indice indice dello sparo nella lista da eliminare
+     */
     public void terminaSparo(int indice) {
         for(int i = 0; i < this.listaSpari.size(); i++) {
             if(this.listaSpari.get(i).indiceSparo == indice) {
