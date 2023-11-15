@@ -47,11 +47,20 @@ public class Client {
         while(true) {
             String messaggio = comunicazioneServer.riceviMessaggio();
             String[] messVett = messaggio.split(";");
+           
             if(messVett.length == 3) {
+               
+            if(messVett[0] == "vite") {
+                System.out.println(messaggio);
+                int indiceSparoTerminato = Integer.parseInt(messVett[1]);
+                gc.terminaSparo(indiceSparoTerminato);
+            }else{
                 String lettera = messVett[0];
                 String x = messVett[1];
                 String y = messVett[2];
                 gc.modificaXYcarro(lettera, x, y);
+            }
+                
             }
             else if(messVett.length == 4) {
                  String direziobneSparo = messVett[0];
@@ -61,6 +70,7 @@ public class Client {
                 gc.inizializzaSparo(direziobneSparo,lettera, Integer.parseInt(x), Integer.parseInt(y), comunicazioneServer);
             }
             else if(messVett.length == 2) {
+                System.out.println(messaggio);
                 int indiceSparoTerminato = Integer.parseInt(messVett[1]);
                 gc.terminaSparo(indiceSparoTerminato);
             }

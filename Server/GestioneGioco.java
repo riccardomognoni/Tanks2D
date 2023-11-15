@@ -38,23 +38,27 @@ public class GestioneGioco {
      * @param sparo //sparo da controllare
      * @return
      */
-    public boolean controllaSeColpito(Sparo sparo) {
+    public String controllaSeColpito(Sparo sparo) {
+        String str=""; int i=0;
         for (Carro carro : listaCarri) {
+            
             //controllo che il carro colpito non sia lo stesso che ha sparato
             if (!carro.letteraCarro.equals(sparo.letteraCarro)) {
                 //controllo se il colpo ha colpito un blocco
                 bloccoColpitoCorrente = gestioneBl.controllaColpitoBlocco(sparo);
                 //se ha colpito il blocco termino lo sparo
                 if (bloccoColpitoCorrente) {
-                    return true;
+                    return "bloccoColpito";
                 //se ha colpito un carro allora termino lo sparo
                 } else if (carro.controllaColpoSuCarro(sparo, indiceSparoAttuale)) {
-                    return true;
+                    str="vite"+listaCarri.get(i).letteraCarro+";"+listaCarri.get(i).vite;
+                    return str;
                 }
             }
+            i++;
         }
         //altrimenti non ha colpito nulla e può andare avanti
-        return false;
+        return "";
     }
     /**
      * inizializzo lo sparo con la posizione inziale (in base alla direzione del carro)
