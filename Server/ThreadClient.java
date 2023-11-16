@@ -56,15 +56,11 @@ public class ThreadClient implements Runnable {
                         int posYsparo = Integer.parseInt(comandoSplit[3]);
                         Sparo sp = new Sparo(lettera, indiceSparo, posXsparo, posYsparo);
                         //se un blocco è stato colpito termino lo sparo
-                        String colpito = gc.controllaSeColpito(sp);
+                        boolean bloccoColpito = gc.controllaSeColpito(sp);
                         boolean sparoUscitaFinestra = gc.controllaCollisioneSparoBordi(sp);
-                        if(colpito == "bloccoColpito" || sparoUscitaFinestra == true) {
+                        if(bloccoColpito == true || sparoUscitaFinestra == true) {
                             comunicazioneClient.inviaClientString(writer, "T" + ";" + indiceSparo);
-                        } 
-                        else if(colpito!=""){
-
-                              comunicazioneClient.inviaClientString(writer,colpito);
-                        }
+                        }  
                     }
                 }
                 writer.flush();
@@ -88,7 +84,15 @@ public class ThreadClient implements Runnable {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
+                //controllo se un carro ha terminato le vite
+                boolean fineVitePlayer = gc.controllaVite();
+                if(fineVitePlayer == true) {
+                    Carro carroSconfitto = gc.getSconfitto();
+                    comunicazioneClient.inviaClientString(writer, "fine" + ";" + carroSconfitto.letteraCarro); 
+                } 
                 inviaListaCarri(writer);
+                inviaListaVite(writer);
+                //invia spari
             }
         }, 0, SYNC_DELAY);
     }
@@ -101,8 +105,8 @@ public class ThreadClient implements Runnable {
     public void muoviCarro(String comando) {
         gc.muoviCarro(comando.substring(0, 1), comando.substring(1, 2));
     }
-    public void inviaViteClient(String comando, PrintWriter writer) {
-        comunicazioneClient.inviaClientString(writer, comando);
+    public void inviaListaVite(PrintWriter writer) {
+        comunicazioneClient.inviaVite(writer, gc);
     }
     
 }

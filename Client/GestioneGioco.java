@@ -89,6 +89,33 @@ public class GestioneGioco  {
             }
         }
     }
-
-   
+    public void aggiornaVite(String lettera, int vite) {
+        for(int i = 0; i< this.listaCarri.size(); i++) {
+            if(this.listaCarri.get(i).letteraCarro.equals(lettera)) {
+                this.listaCarri.get(i).vite = vite;
+                //System.out.println(this.listaCarri.get(i).vite);
+            }
+        }
+    }
+    /**
+     * controllo se un carro ha terminato le vite
+     * @return
+     */
+    public boolean controllaVite() {
+        for(int i = 0; i < this.listaCarri.size(); i++) {
+           if(this.listaCarri.get(i).vite == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public Carro getCarro(String lettera) {
+        Carro carroTmp = new Carro();
+        for(int i = 0; i < this.listaCarri.size(); i++) {
+            if(this.listaCarri.get(i).letteraCarro.equals(lettera)) {
+                return this.listaCarri.get(i);
+            }
+        }
+        return carroTmp;
+    }
 }

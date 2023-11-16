@@ -9,6 +9,7 @@ import org.xml.sax.SAXException;
 
 public class Client {
     //lettera assegnata al carro
+    //CONTROLLO SE LA LETTERA GIOCATORE E' LA STESSA SCONFITTA
     static String letteraGiocatore = "";
     static Carro carroPlayer;
     public static GestioneBlocchi gb;
@@ -23,7 +24,7 @@ public class Client {
         //RICEVO I BLOCCHI DAL SERVER
         gb = comunicazioneServer.riceviBlocchi();
         GestioneGioco gc = new GestioneGioco(gb);
-        finestraGrafica schermataGioco = new finestraGrafica(gc);
+        finestraGioco schermataGioco = new finestraGioco(gc);
 
         //OTTENGO I DATI INIZIALI DEI CARRI
         for(int i = 0; i < 2; i++) {
@@ -47,20 +48,18 @@ public class Client {
         while(true) {
             String messaggio = comunicazioneServer.riceviMessaggio();
             String[] messVett = messaggio.split(";");
-           
             if(messVett.length == 3) {
-               
-            if(messVett[0] == "vite") {
-                System.out.println(messaggio);
-                int indiceSparoTerminato = Integer.parseInt(messVett[1]);
-                gc.terminaSparo(indiceSparoTerminato);
-            }else{
-                String lettera = messVett[0];
-                String x = messVett[1];
-                String y = messVett[2];
-                gc.modificaXYcarro(lettera, x, y);
-            }
-                
+                if(messVett[0].equals("vite")) {
+                    String lettera = messVett[1];
+                    int vite = Integer.parseInt(messVett[2]);
+                    gc.aggiornaVite(lettera, vite);
+                }
+                else {
+                    String lettera = messVett[0];
+                    String x = messVett[1];
+                    String y = messVett[2];
+                    gc.modificaXYcarro(lettera, x, y);
+                }
             }
             else if(messVett.length == 4) {
                  String direziobneSparo = messVett[0];
@@ -70,10 +69,31 @@ public class Client {
                 gc.inizializzaSparo(direziobneSparo,lettera, Integer.parseInt(x), Integer.parseInt(y), comunicazioneServer);
             }
             else if(messVett.length == 2) {
-                System.out.println(messaggio);
-                int indiceSparoTerminato = Integer.parseInt(messVett[1]);
-                gc.terminaSparo(indiceSparoTerminato);
+                if(messVett[0].equals("fine")) {
+                    String letteraSconfitto = messVett[1];
+                    gestitsciVittoriaSconfitta(comunicazioneServer, schermataGioco,letteraSconfitto);
+                } else {
+                    int indiceSparoTerminato = Integer.parseInt(messVett[1]);
+                    gc.terminaSparo(indiceSparoTerminato);
+                }
             }
+        }
+    }
+    //gestisco la sconfitta o la vittoria del client corrente a seconda se la lettera dello sconfitto
+    //corrisponde a quella del client attuale
+    public static void gestitsciVittoriaSconfitta(Messaggio comunicazioneServer, finestraGioco schermataGioco, String _letteraSconfitto) throws IOException {
+        if(_letteraSconfitto.equals(letteraGiocatore)) {
+            //apro la finestra di vittoria
+            schermataGioco.chiudiFinestra();
+            finestraSconfitta schermataSconfitta = new finestraSconfitta(letteraGiocatore);
+            schermataSconfitta.disegnaFinestra();
+            comunicazioneServer.chiudiStream();
+        } else {
+            schermataGioco.chiudiFinestra();
+            finestraVittoria schermataVittoria = new finestraVittoria(letteraGiocatore);
+            schermataVittoria.disegnaFinestra();
+            comunicazioneServer.chiudiStream();
+            //apro la finestra di sconfitta
         }
     }
 }

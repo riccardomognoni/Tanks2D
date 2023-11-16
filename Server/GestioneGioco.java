@@ -38,27 +38,23 @@ public class GestioneGioco {
      * @param sparo //sparo da controllare
      * @return
      */
-    public String controllaSeColpito(Sparo sparo) {
-        String str=""; int i=0;
+    public boolean controllaSeColpito(Sparo sparo) {
         for (Carro carro : listaCarri) {
-            
             //controllo che il carro colpito non sia lo stesso che ha sparato
             if (!carro.letteraCarro.equals(sparo.letteraCarro)) {
                 //controllo se il colpo ha colpito un blocco
                 bloccoColpitoCorrente = gestioneBl.controllaColpitoBlocco(sparo);
                 //se ha colpito il blocco termino lo sparo
                 if (bloccoColpitoCorrente) {
-                    return "bloccoColpito";
+                    return true;
                 //se ha colpito un carro allora termino lo sparo
                 } else if (carro.controllaColpoSuCarro(sparo, indiceSparoAttuale)) {
-                    str="vite"+listaCarri.get(i).letteraCarro+";"+listaCarri.get(i).vite;
-                    return str;
+                    return true;
                 }
             }
-            i++;
         }
         //altrimenti non ha colpito nulla e può andare avanti
-        return "";
+        return false;
     }
     /**
      * inizializzo lo sparo con la posizione inziale (in base alla direzione del carro)
@@ -133,5 +129,28 @@ public class GestioneGioco {
     public String serializzaBlocchi() {
         String blocchi = this.gestioneBl.serializzaBlocchi();
         return blocchi;
+    }
+    /**
+     * controllo se uno tra i carri ha finito le vite
+     * @return
+     */
+    public boolean controllaVite() {
+        for(int i = 0; i < this.listaCarri.size(); i++) {
+            if(listaCarri.get(i).vite == 0) {
+                //le ha finite
+                return true;
+            }
+        }
+        //non le ha finite
+        return false;
+    }
+    public Carro getSconfitto() {
+        Carro carroTmp = new Carro();
+        for(int i = 0; i < this.listaCarri.size(); i++) {
+            if(listaCarri.get(i).vite == 0) {
+                return listaCarri.get(i);
+            }
+        }
+        return carroTmp;
     }
 }

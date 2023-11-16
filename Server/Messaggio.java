@@ -61,4 +61,8 @@ public class Messaggio {
             this.inviaClientString(writer, listaCarri.get(i).letteraCarro + ";" + listaCarri.get(i).xGiocatore + ";" + listaCarri.get(i).yGiocatore);
         }
     }
+    public void inviaVite(PrintWriter writer, GestioneGioco gc) {
+        for(int i = 0; i < gc.listaCarri.size(); i++)
+        this.inviaClientString(writer, "vite;" + gc.listaCarri.get(i).letteraCarro + ";" + gc.listaCarri.get(i).vite);
+    }
 }

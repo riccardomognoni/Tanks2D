@@ -8,6 +8,14 @@ public class Carro {
     public int yGiocatore;
     public String direzioneCorrente;
     public int vite;
+    public Carro() {
+        this.urlCarro = "";
+        this.xGiocatore = 0;
+        this.yGiocatore = 0;
+        this.letteraCarro = "";
+        this.direzioneCorrente="W";
+        this.vite = 3;
+    }
     public Carro(String _urlCarro, String _letteraCarro, int xIniziale, int yIniziale) {
         this.urlCarro = _urlCarro;
         this.xGiocatore = xIniziale;
@@ -75,17 +83,13 @@ public class Carro {
             //se l'indice dello sparo è diverso da quello dello sparo attuale (cioè lo sparo attuale non ha ancora colpito il carro avversario)
             if (sparo.indiceSparo != indiceSparoColpito) {
                 //diminuisco le vite del carro
-                if(this.vite!=0){
-                this.vite--;
-                System.out.println("Vite di " + this.letteraCarro + ": " + this.vite);
-                }
-                else{
-                    System.out.println("Vite di " + this.letteraCarro + " esaurite");
-                }
+                if(this.vite > 0) {
+                    this.vite--;
+                } 
                 //imposto l'indiceSparoAttuale per evitare che lo sparo possa nuovamente togliere le vite al client
                 indiceSparoColpito = sparo.indiceSparo;
             }
-            
+            System.out.println("Vite di " + this.letteraCarro + ": " + this.vite);
             //ritorno true perchè lo sparo ha colpito il carro
             return true;
         }

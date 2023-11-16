@@ -62,5 +62,8 @@ public class Messaggio {
         String messaggio = reader.readLine(); 
         return messaggio;
     }
+    public void chiudiStream() throws IOException {
+        reader.close();
+    }
 }
 
