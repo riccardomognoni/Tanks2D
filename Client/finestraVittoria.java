@@ -1,18 +1,31 @@
+import java.awt.Graphics;
+import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class finestraVittoria extends JPanel {
     public static JFrame objGrafica;
-
+    public static Image sfondo;
     public finestraVittoria(String letteraVincitore) {
         objGrafica = new JFrame();
-        disegnaFinestra();
+        ImageIcon imageIcon;
+        if (letteraVincitore.equals("A")) {
+            imageIcon = new ImageIcon("images/giocatoreAvittoria.jpg");
+        } else if (letteraVincitore.equals("B")) {
+            imageIcon = new ImageIcon("images/giocatoreBvittoria.jpg");
+        } else {
+            return;
+        }
+        sfondo = imageIcon.getImage();
+        repaint();
+    }
 
-        JLabel labelVittoria = new JLabel("Giocatore " + letteraVincitore + " hai vinto!");
-        labelVittoria.setBounds(300, 300, 200, 30); 
-        add(labelVittoria); 
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        g.drawImage(sfondo, 0, 0, getWidth(), getHeight(), this);
     }
 
     public void disegnaFinestra() {
