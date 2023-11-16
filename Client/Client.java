@@ -43,18 +43,21 @@ public class Client {
         //AGGIUNGO IL KEY LISTENER
         GestioneInput kl = new GestioneInput(comunicazioneServer, carroPlayer);
         schermataGioco.inizializzaListener(kl);
-        
         //FACCIO CICLO INFINITO CHE LEGGE I COMANDI E GESTISCE LE OPERAZIONI CONSEGUENTI
         while(true) {
             String messaggio = comunicazioneServer.riceviMessaggio();
             String[] messVett = messaggio.split(";");
+            //System.out.println(messaggio);
             if(messVett.length == 3) {
-                if(messVett[0].equals("vite")) {
+                if(messVett[0].equals("visualizzaSparo")) {
+                    //prendo la posizione degli spari
+                    Sparo sp = new Sparo(Integer.parseInt(messVett[1]), Integer.parseInt(messVett[2]));
+                    gc.aggiungiSparoVisualizzazione(sp);
+                } else if(messVett[0].equals("vite")) {
                     String lettera = messVett[1];
                     int vite = Integer.parseInt(messVett[2]);
                     gc.aggiornaVite(lettera, vite);
-                }
-                else {
+                } else {
                     String lettera = messVett[0];
                     String x = messVett[1];
                     String y = messVett[2];
@@ -62,11 +65,12 @@ public class Client {
                 }
             }
             else if(messVett.length == 4) {
-                 String direziobneSparo = messVett[0];
-                String lettera = messVett[1];
-                String x = messVett[2];
-                String y = messVett[3];
-                gc.inizializzaSparo(direziobneSparo,lettera, Integer.parseInt(x), Integer.parseInt(y), comunicazioneServer);
+                    //inizializzo lo sparo
+                    String direziobneSparo = messVett[0];
+                    String lettera = messVett[1];
+                    String x = messVett[2];
+                    String y = messVett[3];
+                    gc.inizializzaSparo(direziobneSparo,lettera, Integer.parseInt(x), Integer.parseInt(y), comunicazioneServer);
             }
             else if(messVett.length == 2) {
                 if(messVett[0].equals("fine")) {

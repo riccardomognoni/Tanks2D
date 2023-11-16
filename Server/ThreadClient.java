@@ -44,21 +44,26 @@ public class ThreadClient implements Runnable {
                     }
                 } else if (comando.length() == 2 && "WASD".contains(comando.substring(1, 2))) {
                     muoviCarro(comando);
-                } else if (comando.length() == 2 && comando.substring(1, 2).equals("M")) {
-                    inizializzaSparo(comando, writer);
                 }
                 else {
                     String[] comandoSplit = comando.split(";");
+                    if(comandoSplit.length == 3) {
+                        //ricevo la lettera del carro che ha sparato e l'indice dello sparo dal client
+                        System.out.println(comando);
+                        inizializzaSparo(comandoSplit, writer);
+                    }
                     if(comandoSplit.length == 4) {
                         String lettera = comandoSplit[0];
                         int indiceSparo = Integer.parseInt(comandoSplit[1]);
                         int posXsparo = Integer.parseInt(comandoSplit[2]);
                         int posYsparo = Integer.parseInt(comandoSplit[3]);
                         Sparo sp = new Sparo(lettera, indiceSparo, posXsparo, posYsparo);
+                        gc.aggiungiListaVisualizza(sp);
                         //se un blocco è stato colpito termino lo sparo
                         boolean bloccoColpito = gc.controllaSeColpito(sp);
                         boolean sparoUscitaFinestra = gc.controllaCollisioneSparoBordi(sp);
                         if(bloccoColpito == true || sparoUscitaFinestra == true) {
+                            gc.eliminaSparo(sp);
                             comunicazioneClient.inviaClientString(writer, "T" + ";" + indiceSparo);
                         }  
                     }
@@ -92,13 +97,20 @@ public class ThreadClient implements Runnable {
                 } 
                 inviaListaCarri(writer);
                 inviaListaVite(writer);
+                inviaListaSpari(writer);
                 //invia spari
             }
         }, 0, SYNC_DELAY);
+         timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                inviaListaSpari(writer);
+            }
+        }, 300, SYNC_DELAY);
     }
 
-    public void inizializzaSparo(String comando, PrintWriter writer) {
-        String sparo = gc.inizializzaSparo(comando.substring(0, 1));
+    public void inizializzaSparo(String[] comandoSplit, PrintWriter writer) {
+        String sparo = gc.inizializzaSparo(comandoSplit[0], comandoSplit[1]);
         comunicazioneClient.inviaClientString(writer, sparo);
     }
 
@@ -107,6 +119,10 @@ public class ThreadClient implements Runnable {
     }
     public void inviaListaVite(PrintWriter writer) {
         comunicazioneClient.inviaVite(writer, gc);
+    }
+    public void inviaListaSpari(PrintWriter writer) {
+        System.out.println("NUMERO DI SPARI:" + gc.listaSpari.size());
+        comunicazioneClient.inviaListaSpari(writer, gc);
     }
     
 }

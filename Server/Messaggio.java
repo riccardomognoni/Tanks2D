@@ -65,4 +65,10 @@ public class Messaggio {
         for(int i = 0; i < gc.listaCarri.size(); i++)
         this.inviaClientString(writer, "vite;" + gc.listaCarri.get(i).letteraCarro + ";" + gc.listaCarri.get(i).vite);
     }
+    public void inviaListaSpari(PrintWriter writer, GestioneGioco gc) {
+        for(int i = 0; i < gc.listaSpari.size(); i++) {
+            //System.out.println(gc.listaSpari);
+            this.inviaClientString(writer, "visualizzaSparo" + ";" + gc.listaSpari.get(i).XSparo + ";" + gc.listaSpari.get(i).YSparo);
+        }
+    }
 }

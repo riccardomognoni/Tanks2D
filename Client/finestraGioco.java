@@ -135,20 +135,23 @@ public class finestraGioco extends JPanel {
         }
     }
     /**
-     * disegno gli spari 
+     * disegno gli spari a
      * @param g 
      * @throws IOException
      */
     public void disegnaSpari(Graphics g) throws IOException {
         //scorro la lista degli spari
-        for(int i = 0; i < gc.listaSpari.size(); i++) {
+        for(int i = 0; i < gc.listaSpariVisualizza.size(); i++) {
             //creo l'immagine dello sparo
             ImageIcon sparo = new ImageIcon("images/sparo.png");
             //disegno lo sparo alla posizione corrente
-            sparo.paintIcon(this, g, gc.listaSpari.get(i).XSparo, gc.listaSpari.get(i).YSparo);
-            //aggiorno la posizione dello sparo per farlo procedere
+            sparo.paintIcon(this, g, gc.listaSpariVisualizza.get(i).XSparo, gc.listaSpariVisualizza.get(i).YSparo);
+            System.out.println(gc.listaSpariVisualizza.get(i).XSparo +";" + gc.listaSpariVisualizza.get(i).YSparo);
+        }
+        for(int i = 0; i < gc.listaSpari.size(); i++) {
             gc.listaSpari.get(i).aggiorna();
         }
+        gc.listaSpariVisualizza.clear();
     }
     public void disegnaBlocchi(Graphics g) throws IOException {
         //disegno i blocchi

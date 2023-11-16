@@ -24,6 +24,14 @@ public class Sparo {
         this.comunicazioneServer = comServer;
         this.indiceSparo = indiceSparo;
     }
+    public Sparo(int xSparo, int ySparo) {
+        this.XSparo = xSparo;
+        this.YSparo = ySparo;
+        this.carroAppartenenza = "";
+        this.direzioneSparo = "";
+        this.indiceSparo = 0;
+        this.comunicazioneServer = null;
+    }
     public void aggiorna() throws IOException {
         //invio al server la posizione aggiornata dello sparo per controllare se ho colpito qualcosa
         boolean inviaPosServer = false;

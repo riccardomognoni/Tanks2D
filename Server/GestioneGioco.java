@@ -8,6 +8,7 @@ public class GestioneGioco {
     //definizione variabili
     gestioneFinestra gestioneBl;
     List<Carro> listaCarri;
+    List<Sparo> listaSpari;
     int indiceSparoAttuale;
     boolean bloccoColpitoCorrente;
     //definizione costanti
@@ -24,6 +25,7 @@ public class GestioneGioco {
     public GestioneGioco() throws IOException { 
         gestioneBl = new gestioneFinestra();
         this.listaCarri = new ArrayList();
+        this.listaSpari = new ArrayList();
         this.indiceSparoAttuale = -1;
     } 
     /**
@@ -62,7 +64,7 @@ public class GestioneGioco {
      * @param lettera //lettera del carro di appartenenza
      * @return
      */
-    public String inizializzaSparo(String lettera) {
+    public String inizializzaSparo(String lettera, String indice) {
         String posIniSparo = "";
         //scorro tutti i carri per controllare a quale appartiene il colpo
         for(int i = 0; i < this.listaCarri.size(); i++) {
@@ -70,6 +72,9 @@ public class GestioneGioco {
                 //calcolo la posizione iniziale dello sparo partendo dalla x del tank, dalla sua y e dal verso (WASD) del carro
                 String posAggiornata = calcolaPosizioneIniSparo(this.listaCarri.get(i).direzioneCorrente, this.listaCarri.get(i).xGiocatore, this.listaCarri.get(i).yGiocatore);
                 String[] posAggiornataSplit = posAggiornata.split(";");
+                //creo lo sparo da aggiungere alla lista degli spari
+                Sparo sparoLista = new Sparo(lettera, Integer.parseInt(indice), Integer.parseInt(posAggiornataSplit[0]), Integer.parseInt(posAggiornataSplit[1]));
+                this.listaSpari.add(sparoLista);
                 //comando da inviare al client per inizializzare lo sparo su client
                 posIniSparo = this.listaCarri.get(i).direzioneCorrente + ";" + this.listaCarri.get(i).letteraCarro + ";" + posAggiornataSplit[0] + ";" + posAggiornataSplit[1]; 
             }
@@ -116,6 +121,8 @@ public class GestioneGioco {
     public String calcolaPosizioneIniSparo(String direzione, int posIniSparoX, int posIniSparoY) {
         int[] posSparo = calcolaPosizioneIniSparoWASD(direzione, posIniSparoX, posIniSparoY);
         String posizioneAggiornata = posSparo[0] + ";" + posSparo[1];
+        //Sparo sparo = new Sparo(lettera, indiceSparoAttuale, posIniSparoX, posIniSparoY);
+        //listaSpari.add(sparo);
         return posizioneAggiornata;
     }
     public boolean controllaCollisioneSparoBordi(Sparo sparo) {
@@ -152,5 +159,35 @@ public class GestioneGioco {
             }
         }
         return carroTmp;
+    }
+    //rimuovo lo sparo che ha colpito il tank/blocco o che è uscito dalla finestra
+    public void eliminaSparo(Sparo sparo) {
+        for(int i = 0; i < this.listaSpari.size(); i++) {
+            if(this.listaSpari.get(i).letteraCarro.equals(sparo.letteraCarro)) {
+                if(this.listaSpari.get(i).indiceSparo == sparo.indiceSparo) {
+                    this.listaSpari.remove(i);
+                }
+            }
+        }
+    }
+    /**
+     * aggiungo alla lista da inviare al client per visualizzare TUTTI i colpi
+     * prima di aggiungere un nuovo colpo controllo se esiste già uno con lo stesso
+     * indice e lettera e se è il caso allora lo sostituisco altrimenti lo aggiungo nuovo
+     * @param sp
+     * @return
+     */
+    public boolean aggiungiListaVisualizza(Sparo sp) {
+        for(int i = 0; i < this.listaSpari.size(); i++) {
+            if(listaSpari.get(i).letteraCarro.equals(sp.letteraCarro)) {
+                if(listaSpari.get(i).indiceSparo == sp.indiceSparo) {
+                    listaSpari.remove(i);
+                    listaSpari.add(sp);
+                    return true;
+                }
+            }
+        }
+        this.listaSpari.add(sp);
+        return false;
     }
 }

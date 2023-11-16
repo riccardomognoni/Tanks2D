@@ -7,12 +7,15 @@ public class GestioneInput extends KeyAdapter  {
     Messaggio comClient;
     String letteraGiocatore;
     Carro carroGiocatore;
+    int indiceSparo;
+    //indice dello sparo che mi serve all'interno del server
     /**
      * costruttore
      * @param _comClient oggetto per gestire la comunicazione con il server
      * @param carro carro del player per cui leggere gli input
      */
     public GestioneInput(Messaggio _comClient, Carro carro) {
+        this.indiceSparo = 0;
         this.comClient = _comClient;
         this.letteraGiocatore = carro.letteraCarro;
         this.carroGiocatore= carro;
@@ -75,7 +78,9 @@ public class GestioneInput extends KeyAdapter  {
          */
         } else if (keyCode == KeyEvent.VK_M) {
             try {
-                 this.comClient.inviaServer(letteraGiocatore + "M");
+                 this.comClient.inviaServer(letteraGiocatore + ";" + indiceSparo + ";" + "M");
+                 //MODIFICA USANDO IL CARRO CON LISTA SPARI O ALTRO METODO
+                 indiceSparo++;
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
