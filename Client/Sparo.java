@@ -1,4 +1,6 @@
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Sparo {
     int XSparo;
@@ -51,7 +53,8 @@ public class Sparo {
            inviaPosServer = true;
         }
         if(inviaPosServer == true) {
-            comunicazioneServer.inviaServer(this.carroAppartenenza + ";" + indiceSparo + ";" + this.XSparo + ";" + this.YSparo);
+            comunicazioneServer.inviaServer("aggiornaSparo;" + this.carroAppartenenza + ";" + indiceSparo + ";" + this.XSparo + ";" + this.YSparo);
         }
     }
+
 }

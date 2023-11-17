@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //CLASSE PER LA GESTIONE/CONTROLLO DEI/SUI BLOCCHI E CONTROLLO SUI MARGINI DELLA FINESTRA
-public class gestioneFinestra {
+public class GestioneFinestra {
     //pos blocchi distruggibili
     //PROBLEMA IL CLIENT NON LEGGE GLI ULTIMI DUE
     final static int posXblocchi[] = {0,50,100,550,200,300,350,450,550,150,150,450,550,250,50,100,150,550,250,350,450,550,50,250,350,550,50,150,250,300,350,550,50,150,250,200,450,550,50};
@@ -17,7 +17,7 @@ public class gestioneFinestra {
     int vecchiaXcarro;
     int vecchiaYcarro;
     int indiceBloccoColpito;
-    public gestioneFinestra() throws IOException {
+    public GestioneFinestra() throws IOException {
         this.indiceBloccoColpito = -1;
         this.vecchiaXcarro = 0;
         this.vecchiaYcarro = 0;

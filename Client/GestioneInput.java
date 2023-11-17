@@ -31,7 +31,7 @@ public class GestioneInput extends KeyAdapter  {
         if (keyCode == KeyEvent.VK_W) {
             System.out.println("Il tasto W è stato premuto. Muovi in alto.");
             try {
-                this.comClient.inviaServer(letteraGiocatore + "W");
+                this.comClient.inviaServer("muoviCarro;" + letteraGiocatore + ";W");
                 carroGiocatore.aggiornaUrl("up");
             } catch (IOException e1) {
                 e1.printStackTrace();
@@ -43,7 +43,7 @@ public class GestioneInput extends KeyAdapter  {
          */
         } else if (keyCode == KeyEvent.VK_A) {
             try {
-                 this.comClient.inviaServer(letteraGiocatore + "A");
+                 this.comClient.inviaServer("muoviCarro;" + letteraGiocatore + ";A");
                  carroGiocatore.aggiornaUrl("left");
             } catch (IOException e1) {
                 e1.printStackTrace();
@@ -55,7 +55,7 @@ public class GestioneInput extends KeyAdapter  {
          */
         } else if (keyCode == KeyEvent.VK_S) {
             try {
-                 this.comClient.inviaServer(letteraGiocatore + "S");
+                 this.comClient.inviaServer("muoviCarro;" + letteraGiocatore + ";S");
                  carroGiocatore.aggiornaUrl("down");
             } catch (IOException e1) {
                 e1.printStackTrace();
@@ -67,7 +67,7 @@ public class GestioneInput extends KeyAdapter  {
          */
         } else if (keyCode == KeyEvent.VK_D) {
             try {
-                 this.comClient.inviaServer(letteraGiocatore + "D");
+                 this.comClient.inviaServer("muoviCarro;" + letteraGiocatore + ";D");
                  carroGiocatore.aggiornaUrl("right");
             } catch (IOException e1) {
                 e1.printStackTrace();
@@ -78,7 +78,7 @@ public class GestioneInput extends KeyAdapter  {
          */
         } else if (keyCode == KeyEvent.VK_M) {
             try {
-                 this.comClient.inviaServer(letteraGiocatore + ";" + indiceSparo + ";" + "M");
+                 this.comClient.inviaServer("inzializzaSparo;" + letteraGiocatore + ";" + indiceSparo + ";" + "M");
                  //MODIFICA USANDO IL CARRO CON LISTA SPARI O ALTRO METODO
                  indiceSparo++;
             } catch (IOException e1) {

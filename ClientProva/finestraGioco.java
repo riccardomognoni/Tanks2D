@@ -146,7 +146,6 @@ public class finestraGioco extends JPanel {
             ImageIcon sparo = new ImageIcon("images/sparo.png");
             //disegno lo sparo alla posizione corrente
             sparo.paintIcon(this, g, gc.listaSpariVisualizza.get(i).XSparo, gc.listaSpariVisualizza.get(i).YSparo);
-            System.out.println(gc.listaSpariVisualizza.get(i).XSparo +";" + gc.listaSpariVisualizza.get(i).YSparo);
         }
         for(int i = 0; i < gc.listaSpari.size(); i++) {
             gc.listaSpari.get(i).aggiorna();
@@ -159,5 +158,22 @@ public class finestraGioco extends JPanel {
     }
     public void chiudiFinestra() {
         objGrafica.dispose();
+    }
+    //gestisco la sconfitta o la vittoria del client corrente a seconda se la lettera dello sconfitto
+    //corrisponde a quella del client attuale
+    public void gestitsciVittoriaSconfitta(Messaggio comunicazioneServer, String letteraGiocatore, String _letteraSconfitto) throws IOException {
+        if(_letteraSconfitto.equals(letteraGiocatore)) {
+            //apro la finestra di vittoria
+            this.chiudiFinestra();
+            finestraSconfitta schermataSconfitta = new finestraSconfitta(letteraGiocatore);
+            schermataSconfitta.disegnaFinestra();
+            comunicazioneServer.chiudiStream();
+        } else {
+            this.chiudiFinestra();
+            finestraVittoria schermataVittoria = new finestraVittoria(letteraGiocatore);
+            schermataVittoria.disegnaFinestra();
+            comunicazioneServer.chiudiStream();
+            //apro la finestra di sconfitta
+        }
     }
 }

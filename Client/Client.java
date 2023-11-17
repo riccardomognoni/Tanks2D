@@ -64,28 +64,11 @@ public class Client {
             }
             else if(messVett[0].equals("fine")) {
                     String letteraSconfitto = messVett[1];
-                    gestitsciVittoriaSconfitta(comunicazioneServer, schermataGioco,letteraSconfitto);
-            } else {
-                    int indiceSparoTerminato = Integer.parseInt(messVett[1]);
-                    gc.terminaSparo(indiceSparoTerminato);
+                    schermataGioco.gestitsciVittoriaSconfitta(comunicazioneServer,letteraGiocatore, letteraSconfitto);
+            } else if(messVett[0].equals("T")) {
+                int indiceSparoTerminato = Integer.parseInt(messVett[1]);
+                gc.terminaSparo(indiceSparoTerminato);
             }
-        }
-    }
-    //gestisco la sconfitta o la vittoria del client corrente a seconda se la lettera dello sconfitto
-    //corrisponde a quella del client attuale
-    public static void gestitsciVittoriaSconfitta(Messaggio comunicazioneServer, finestraGioco schermataGioco, String _letteraSconfitto) throws IOException {
-        if(_letteraSconfitto.equals(letteraGiocatore)) {
-            //apro la finestra di vittoria
-            schermataGioco.chiudiFinestra();
-            finestraSconfitta schermataSconfitta = new finestraSconfitta(letteraGiocatore);
-            schermataSconfitta.disegnaFinestra();
-            comunicazioneServer.chiudiStream();
-        } else {
-            schermataGioco.chiudiFinestra();
-            finestraVittoria schermataVittoria = new finestraVittoria(letteraGiocatore);
-            schermataVittoria.disegnaFinestra();
-            comunicazioneServer.chiudiStream();
-            //apro la finestra di sconfitta
         }
     }
     public static void sincronizza() throws IOException {

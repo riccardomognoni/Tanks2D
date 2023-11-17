@@ -6,11 +6,14 @@ import javax.swing.*;
 //CLASSE PER LA GESTIONE DEL GIOCO DA PARTE DEL SERVER
 public class GestioneGioco {
     //definizione variabili
-    gestioneFinestra gestioneBl;
+    GestioneFinestra gestioneBl;
     List<Carro> listaCarri;
     List<Sparo> listaSpari;
     int indiceSparoAttuale;
     boolean bloccoColpitoCorrente;
+    long ultimoTempoSparoA = System.currentTimeMillis();
+    long ultimoTempoSparoB = System.currentTimeMillis();
+    private static final int TEMPO_MINIMO_TRA_SPARATI = 3000;
     //definizione costanti
     final static int WIDTH_FINESTRA_SPARO = 630;
     final static int HEIGHT_FINESTRA_SPARO =600;
@@ -23,7 +26,7 @@ public class GestioneGioco {
     final static int Y_TITOLO = 30;
     final static int delay = 100;
     public GestioneGioco() throws IOException { 
-        gestioneBl = new gestioneFinestra();
+        gestioneBl = new GestioneFinestra();
         this.listaCarri = new ArrayList();
         this.listaSpari = new ArrayList();
         this.indiceSparoAttuale = -1;
@@ -66,22 +69,44 @@ public class GestioneGioco {
      */
     public String inizializzaSparo(String lettera, String indice) {
         String posIniSparo = "";
-        //scorro tutti i carri per controllare a quale appartiene il colpo
-        for(int i = 0; i < this.listaCarri.size(); i++) {
-            if(this.listaCarri.get(i).letteraCarro.equals(lettera)) {
-                //calcolo la posizione iniziale dello sparo partendo dalla x del tank, dalla sua y e dal verso (WASD) del carro
-                String posAggiornata = calcolaPosizioneIniSparo(this.listaCarri.get(i).direzioneCorrente, this.listaCarri.get(i).xGiocatore, this.listaCarri.get(i).yGiocatore);
-                String[] posAggiornataSplit = posAggiornata.split(";");
-                //creo lo sparo da aggiungere alla lista degli spari
-                Sparo sparoLista = new Sparo(lettera, Integer.parseInt(indice), Integer.parseInt(posAggiornataSplit[0]), Integer.parseInt(posAggiornataSplit[1]));
-                this.listaSpari.add(sparoLista);
-                //comando da inviare al client per inizializzare lo sparo su client
-                posIniSparo = "inizializzaSparo;" + this.listaCarri.get(i).direzioneCorrente + ";" + this.listaCarri.get(i).letteraCarro + ";" + posAggiornataSplit[0] + ";" + posAggiornataSplit[1]; 
+        long tempoAttuale = System.currentTimeMillis();
+        
+        if(lettera.equals("A")) {
+            if ((tempoAttuale - ultimoTempoSparoA) >= TEMPO_MINIMO_TRA_SPARATI) {
+               ultimoTempoSparoA = tempoAttuale;
+               String comando = inizializzaSparoCalcolo(posIniSparo, indice, lettera);
+               return comando;
             }
         }
-        //ritorno la posizione iniziale dello sparo, da inviare al client
-        return posIniSparo;
+        else if(lettera.equals("B")) {
+            if ((tempoAttuale - ultimoTempoSparoB) >= TEMPO_MINIMO_TRA_SPARATI) {
+                ultimoTempoSparoB = tempoAttuale;
+                String comando = inizializzaSparoCalcolo(posIniSparo, indice, lettera);
+                return comando;
+            }
+        }
+        return "inizializzaSparo;W;A;-10;-10";
     }
+    public String inizializzaSparoCalcolo(String posIniSparo, String indice, String lettera) {
+         //scorro tutti i carri per controllare a quale appartiene il colpo
+            for(int i = 0; i < this.listaCarri.size(); i++) {
+                if(this.listaCarri.get(i).letteraCarro.equals(lettera)) {
+                    //calcolo la posizione iniziale dello sparo partendo dalla x del tank, dalla sua y e dal verso (WASD) del carro
+                    String posAggiornata = calcolaPosizioneIniSparo(this.listaCarri.get(i).direzioneCorrente, this.listaCarri.get(i).xGiocatore, this.listaCarri.get(i).yGiocatore);
+                    String[] posAggiornataSplit = posAggiornata.split(";");
+                    //creo lo sparo da aggiungere alla lista degli spari
+                    Sparo sparoLista = new Sparo(lettera, Integer.parseInt(indice), Integer.parseInt(posAggiornataSplit[0]), Integer.parseInt(posAggiornataSplit[1]));
+                    this.listaSpari.add(sparoLista);
+                    //comando da inviare al client per inizializzare lo sparo su client
+                    posIniSparo = "inizializzaSparo;" + this.listaCarri.get(i).direzioneCorrente + ";" + this.listaCarri.get(i).letteraCarro + ";" + posAggiornataSplit[0] + ";" + posAggiornataSplit[1]; 
+                    return posIniSparo;
+                }
+            }
+        //ritorno la posizione iniziale dello sparo, da inviare al client
+        return "inizializzaSparo;W;A;-10;-10";
+    } 
+           
+       
     //muove il carro nella direzione indicata dal client
     public String muoviCarro(String carro, String direzione){
         String messaggioClient = "";
