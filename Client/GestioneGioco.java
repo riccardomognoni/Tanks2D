@@ -59,12 +59,13 @@ public class GestioneGioco  {
      * @param x la sua x
      * @param y la sua y
      */
-    public void modificaXYcarro(String lettera, String x, String y) {
+    public void modificaXYcarro(String lettera, String x, String y, String direzione) {
         for(int i =0; i < this.listaCarri.size(); i++) {
             Carro carroTmp = this.listaCarri.get(i);
             if(carroTmp.letteraCarro.equals(lettera)) {
                 carroTmp.posizioneX = Integer.parseInt(x);
                 carroTmp.posizioneY = Integer.parseInt(y);
+                carroTmp.aggiornaUrlDaWASD(direzione);
             }
         }
     }

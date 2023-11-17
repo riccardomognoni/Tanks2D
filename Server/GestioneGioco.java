@@ -76,7 +76,7 @@ public class GestioneGioco {
                 Sparo sparoLista = new Sparo(lettera, Integer.parseInt(indice), Integer.parseInt(posAggiornataSplit[0]), Integer.parseInt(posAggiornataSplit[1]));
                 this.listaSpari.add(sparoLista);
                 //comando da inviare al client per inizializzare lo sparo su client
-                posIniSparo = this.listaCarri.get(i).direzioneCorrente + ";" + this.listaCarri.get(i).letteraCarro + ";" + posAggiornataSplit[0] + ";" + posAggiornataSplit[1]; 
+                posIniSparo = "inizializzaSparo;" + this.listaCarri.get(i).direzioneCorrente + ";" + this.listaCarri.get(i).letteraCarro + ";" + posAggiornataSplit[0] + ";" + posAggiornataSplit[1]; 
             }
         }
         //ritorno la posizione iniziale dello sparo, da inviare al client

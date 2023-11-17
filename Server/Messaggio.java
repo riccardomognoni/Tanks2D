@@ -58,7 +58,8 @@ public class Messaggio {
     public void inviaListaCarri(PrintWriter writer, GestioneGioco gc) {
         List<Carro> listaCarri = gc.listaCarri;
         for(int i = 0; i < listaCarri.size(); i++) {
-            this.inviaClientString(writer, listaCarri.get(i).letteraCarro + ";" + listaCarri.get(i).xGiocatore + ";" + listaCarri.get(i).yGiocatore);
+            Carro carroTmp = listaCarri.get(i);
+            this.inviaClientString(writer, "posizioneCarro;" + carroTmp.letteraCarro + ";" + carroTmp.xGiocatore + ";" + carroTmp.yGiocatore + ";" + carroTmp.direzioneCorrente);
         }
     }
     public void inviaVite(PrintWriter writer, GestioneGioco gc) {

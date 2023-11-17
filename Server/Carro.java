@@ -30,6 +30,7 @@ public class Carro {
      * @return
      */
     public String muoviCarro(String direzione){
+        this.direzioneCorrente = direzione;
         //caso di W
         if(direzione.equals("W")){
             //modifico la direzione del carro
