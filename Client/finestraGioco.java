@@ -12,8 +12,8 @@ public class finestraGioco extends JPanel {
      */
     final static int WIDTH_VITE = 140;
     final static int HEIGTH_VITE = 600;
-    final static int X_TITOLO = 655;
-    final static int Y_TITOLO = 30;
+    final static int X_TITOLO_VITE = 655;
+    final static int Y_TITOLO_VITE = 30;
     final static int delay = 100;
 
     /**
@@ -87,20 +87,22 @@ public class finestraGioco extends JPanel {
         //titolo del pannello delle vite
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, 20));
-        String titolo = "Vite";
-        g.drawString(titolo, X_TITOLO, Y_TITOLO);
+        String titoloVite = "Vite";
+        g.drawString(titoloVite, X_TITOLO_VITE, Y_TITOLO_VITE);
 
         //vite del giocatore A
         String playerA = "Giocatore A:";
-        g.drawString(playerA, X_TITOLO, Y_TITOLO + 30);
+        g.drawString(playerA, X_TITOLO_VITE, Y_TITOLO_VITE + 30);
+        g.drawString("(verde):", X_TITOLO_VITE, Y_TITOLO_VITE + 50);
         String viteA = Integer.toString(gc.getCarro("A").vite);
-        g.drawString(viteA, X_TITOLO, Y_TITOLO + 50);
+        g.drawString(viteA, X_TITOLO_VITE, Y_TITOLO_VITE + 70);
 
         //del giocatore B
         String playerB = "Giocatore B:";
-        g.drawString(playerB, X_TITOLO, Y_TITOLO + 70);
+        g.drawString(playerB, X_TITOLO_VITE, Y_TITOLO_VITE + 90);
+        g.drawString("(rosso):", X_TITOLO_VITE, Y_TITOLO_VITE + 110);
         String viteB = Integer.toString(gc.getCarro("B").vite);
-        g.drawString(viteB, X_TITOLO, Y_TITOLO + 90);
+        g.drawString(viteB, X_TITOLO_VITE, Y_TITOLO_VITE + 130);
     }
 
     /**

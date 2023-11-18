@@ -22,7 +22,7 @@ import javax.swing.Timer;
  * creo una nuova listaVisualizzazione che invece contiene gli spari e che è quella usata per visualizzare
  * tutti gli spari, ricevo dal server la lista con tutti gli spari e la visualizzo
  */
-//CLASSE PER LA GESTIONE DEL GIOCO DA PARTE DEL SERVER
+//CLASSE PER LA GESTIONE DEL GIOCO DA PARTE DEL CLIENT TRAMITE DATI RICEVUTI DA SERVER
 public class GestioneGioco  {
     //gestisco la lista dei carri e la lista degli spari oltre che la gestione blocchi
     GestioneBlocchi gestioneBl;

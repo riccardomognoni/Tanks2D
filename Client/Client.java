@@ -3,6 +3,7 @@ import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
@@ -19,7 +20,7 @@ public class Client {
     static GestioneGioco gc;
     public static void main(String[] args) throws SAXException, IOException, ParserConfigurationException {
         comunicazioneServer = new Messaggio();
-
+        
         //MI SINCRONIZZO
         sincronizza();
         
@@ -28,6 +29,11 @@ public class Client {
 
         //OTTENGO I DATI INIZIALI DEI CARRI
         riceviDatiInizialiCarri();
+    
+        finestraStart finestraStart = new finestraStart(letteraGiocatore);
+        finestraStart.apriFinestra();
+        finestraStart.chiudiFinestra();
+        
 
         carroPlayer = gc.ottieniCarroPlayer(letteraGiocatore);
         schermataGioco.disegnaFinestra();
