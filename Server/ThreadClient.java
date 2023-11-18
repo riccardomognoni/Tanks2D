@@ -1,136 +1,99 @@
 import java.io.*;
 import java.net.Socket;
 import java.util.Timer;
-import java.util.TimerTask;
 
+//CLASSE PER LA GESTIONE DELLE RICHIESTE CLIENT/RISPOSTE AL CLIENT
 public class ThreadClient implements Runnable {
-    private Messaggio comunicazioneClient;
+    //socket del client
     private Socket clientSocket;
+    //oggetto gc per la gestione del gioco per i controlli sui dati ricevuti dal client
     private GestioneGioco gc;
-    private int indiceLettera;
-    private String[] lettere;
-    InputStream inputStream;
-    OutputStream outputStream;
-    PrintWriter writer;
-    private int[] posIniGiocatoriX;
-    private int[] posIniGiocatoriY;
-    private final static int SYNC_DELAY = 100;
-
-    public ThreadClient(Messaggio comunicazioneClient, Socket socket, GestioneGioco gc, int indiceLettera,
+    //oggetto funzionalitaThread per la gestione delle funzioni della classe ThreadClient
+    FunzionalitaThreadClient funzionalitaThread;
+    
+    //costruttore di default
+    public ThreadClient() {
+        this.clientSocket = null;
+        this.gc = null;
+        this.funzionalitaThread = null;
+    }
+    //costruttore con parametri
+    public ThreadClient(Socket socket, GestioneGioco gc, int indiceLettera,
         String[] lettere, int[] posIniGiocatoriX, int[] posIniGiocatoriY) {
-        this.comunicazioneClient = comunicazioneClient;
+        //socket per la com. con il client
         this.clientSocket = socket;
+        //gestione gioco
         this.gc = gc;
-        this.indiceLettera = indiceLettera;
-        this.lettere = lettere;
-        this.posIniGiocatoriX = posIniGiocatoriX;
-        this.posIniGiocatoriY = posIniGiocatoriY;
+        //oggetto per la gestione delle funzionalità del threadClient che gestisce ilsingolo client
+        funzionalitaThread = new FunzionalitaThreadClient(socket, gc, indiceLettera, lettere, posIniGiocatoriX, posIniGiocatoriY);
     }
 
     @Override
     public void run() {
         try {
+            //timer per aggiornare le informazioni lato client
             Timer timer = new Timer();
-            inputStream = clientSocket.getInputStream();
-            outputStream = clientSocket.getOutputStream();
-            writer = new PrintWriter(outputStream, true);
+            //input stream e output stream per la comunicazione con il clientS
+            InputStream inputStream = clientSocket.getInputStream();
+            OutputStream outputStream = clientSocket.getOutputStream();
+            //writer per la com. con il client
+            PrintWriter writer = new PrintWriter(outputStream, true);
 
+            /**
+             * salvo gli attributi utili alla comunicazione nella classe Messaggio
+             * - inputStream
+             * - outputStream
+             * - writer
+             */
+            funzionalitaThread.impostaInOutWr(inputStream, outputStream, writer);
+            
             while (true) {
                 //RICEVO IL COMANDO
-                String comando = comunicazioneClient.leggiMessaggioClient(inputStream);
+                String comando = funzionalitaThread.leggiMessaggioClient();
+                //faccio la split del comando tramite il ;
                 String[] comandoSplit = comando.split(";");
-                //System.out.println("Il server riceve: " + comando);
+               /**caso di sincronizza:
+                * per inviare al client le informazioni iniziali
+               */
                 if (comando.equals("sincronizza")) {
-                    sincronizzazione();
+                    funzionalitaThread.sincronizzazione();
+                /**caso di movimento del carro:
+                 * aggiorno x e y del carro controllando se il carro si muove
+                 * senza colpire un ostacolo
+                */ 
                 } else if(comandoSplit[0].equals("muoviCarro")) {
-                    muoviCarro(comandoSplit);
+                    funzionalitaThread.muoviCarro(comandoSplit);
                 }
+                /**
+                 * inzializzo lo sparo calcolandone la posizione iniziale
+                 * in termini di x e y, eseguito in seguito al comando che
+                 * il client invia quando preme 'M'
+                 */
                 else if(comandoSplit[0].equals("inzializzaSparo")) {
-                    inizializzaSparo(comandoSplit, writer);
+                    funzionalitaThread.inizializzaSparo(comandoSplit);
+                /**
+                 * aggiorno lo stato dello sparo in base alle x e y ricevute dal client:
+                 * controllo se lo sparo ha colpito il carro avversario, un ostacolo
+                 * o un bordo della finestra e quindi lo termino
+                 */
                 } else if(comandoSplit[0].equals("aggiornaSparo")) {
-                    Sparo sp = ottieniSparo(comandoSplit);
+                    Sparo sp = funzionalitaThread.ottieniSparo(comandoSplit);
                     int indiceSparo = Integer.parseInt(comandoSplit[2]);
+                    //aggiorno la lista che permette di visualizzare nel client TUTTI i colpi
+                    //(quelli del client attuale e del carro/client avversario)
                     gc.aggiungiListaVisualizza(sp);
-                    controllaSparoTerminato(sp, indiceSparo);
+                    //controllo se lo sparo è da terminare
+                    funzionalitaThread.controllaSparoTerminato(sp, indiceSparo);
                 }
                 writer.flush();
-                impostaTimer(timer, writer);
+                //imposto il timer con cui il server invierà al client
+                //- la posizione  dei carri con la loro direzione,
+                //- le vite dei carri
+                //- la lista con tutti gli spari attivi al momento nel gioco (per la visualizzazione)
+                funzionalitaThread.impostaTimer(timer);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private void inviaLetteraPosizione(PrintWriter writer, String lettera, int posX, int posY) throws IOException {
-        writer = comunicazioneClient.inviaLetteraClient(writer, lettera);
-        comunicazioneClient.inviaPosizioneClient(writer, posX, posY);
-    }
-
-    private void inviaListaCarri(PrintWriter writer) {
-        comunicazioneClient.inviaListaCarri(writer, gc);
-    }
-
-    private void impostaTimer(Timer timer, PrintWriter writer) {
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                //controllo se un carro ha terminato le vite
-                boolean fineVitePlayer = gc.controllaVite();
-                if(fineVitePlayer == true) {
-                    Carro carroSconfitto = gc.getSconfitto();
-                    comunicazioneClient.inviaClientString(writer, "fine" + ";" + carroSconfitto.letteraCarro); 
-                } 
-                inviaListaCarri(writer);
-                inviaListaVite(writer);
-                inviaListaSpari(writer);
-                //invia spari
-            }
-        }, 0, SYNC_DELAY);
-         timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                inviaListaSpari(writer);
-            }
-        }, 300, SYNC_DELAY);
-    }
-
-    public void inizializzaSparo(String[] comandoSplit, PrintWriter writer) {
-        String sparo = gc.inizializzaSparo(comandoSplit[1], comandoSplit[2]);
-        comunicazioneClient.inviaClientString(writer, sparo);
-    }
-
-    public void muoviCarro(String[] comandoSplit) {
-        gc.muoviCarro(comandoSplit[1], comandoSplit[2]);
-    }
-    public void inviaListaVite(PrintWriter writer) {
-        comunicazioneClient.inviaVite(writer, gc);
-    }
-    public void inviaListaSpari(PrintWriter writer) {
-        System.out.println("NUMERO DI SPARI:" + gc.listaSpari.size());
-        comunicazioneClient.inviaListaSpari(writer, gc);
-    }
-    public void sincronizzazione() throws IOException  {
-        comunicazioneClient.inviaBlocchiClient(writer, gc);
-        if (indiceLettera < 2) {
-            inviaLetteraPosizione(writer, lettere[indiceLettera], posIniGiocatoriX[indiceLettera], posIniGiocatoriY[indiceLettera]);
-            indiceLettera = (indiceLettera == 0 || indiceLettera == 2) ? indiceLettera + 1 : indiceLettera - 1;
-            inviaLetteraPosizione(writer, lettere[indiceLettera], posIniGiocatoriX[indiceLettera], posIniGiocatoriY[indiceLettera]);
-        }
-    }
-    public Sparo ottieniSparo(String[] comandoSplit) {
-        String lettera = comandoSplit[1];
-        int indiceSparo = Integer.parseInt(comandoSplit[2]);
-        int posXsparo = Integer.parseInt(comandoSplit[3]);
-        int posYsparo = Integer.parseInt(comandoSplit[4]);
-        Sparo sp = new Sparo(lettera, indiceSparo, posXsparo, posYsparo);
-        return sp;
-    }
-    public void controllaSparoTerminato(Sparo sp, int indiceSparo) {
-        boolean bloccoColpito = gc.controllaSeColpito(sp);
-        boolean sparoUscitaFinestra = gc.controllaCollisioneSparoBordi(sp);
-        if(bloccoColpito == true || sparoUscitaFinestra == true) {
-            gc.eliminaSparo(sp);
-            comunicazioneClient.inviaClientString(writer, "T" + ";" + indiceSparo);
-        }  
     }
 }

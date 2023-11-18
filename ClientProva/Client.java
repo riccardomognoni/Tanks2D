@@ -65,7 +65,7 @@ public class Client {
             else if(messVett[0].equals("fine")) {
                     String letteraSconfitto = messVett[1];
                     schermataGioco.gestitsciVittoriaSconfitta(comunicazioneServer,letteraGiocatore, letteraSconfitto);
-            } else if(messVett[0].equals("T")) {
+            } else if(messVett[0].equals("terminaSparo")) {
                 int indiceSparoTerminato = Integer.parseInt(messVett[1]);
                 gc.terminaSparo(indiceSparoTerminato);
             }
