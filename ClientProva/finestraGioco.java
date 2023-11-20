@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 
 //CLASSE PER GESTIRE LA FINESTRA GRAFICA DEL GIOCO 
-public class finestraGioco extends JPanel {
+public class FinestraGioco extends JPanel {
     /**
      * costanti per la grafica
      */
@@ -30,7 +30,7 @@ public class finestraGioco extends JPanel {
      * costruttore
      * @param _gc gestione gioco da cui prendere i dati
      */
-    public finestraGioco(GestioneGioco _gc) {
+    public FinestraGioco(GestioneGioco _gc) {
         //inizializzo l'oggetto per la grafica
         objGrafica = new JFrame();
         //imposto l'attributo
@@ -211,7 +211,7 @@ public class finestraGioco extends JPanel {
             //chiudo la finestra di gioco
             this.chiudiFinestra();
             //creo la schermata di sconfitta con la lettera del giocatore
-            finestraSconfitta schermataSconfitta = new finestraSconfitta(letteraGiocatore);
+            FinestraSconfitta schermataSconfitta = new FinestraSconfitta(letteraGiocatore);
             //disegno la shcermata di sconfitta
             schermataSconfitta.disegnaFinestra();
             //chiudo lo stream di input
@@ -221,7 +221,7 @@ public class finestraGioco extends JPanel {
             //chiudo la finestra di gioco
             this.chiudiFinestra();
             //creo la schermata di vittoria con la lettera del giocatore
-            finestraVittoria schermataVittoria = new finestraVittoria(letteraGiocatore);
+            FinestraVittoria schermataVittoria = new FinestraVittoria(letteraGiocatore);
             //disegno la shcermata di vittoria
             schermataVittoria.disegnaFinestra();
             //chiudo lo stream di input

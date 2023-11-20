@@ -5,6 +5,7 @@ import org.xml.sax.SAXException;
 
 //classe PRINCIPALE del client (singolo) che gestisce le risposte del server
 //e richiama i metodi opportuni per lo scambio di dati.
+//per impostare IP e PORT del server con cui comunichiamo -> in classe Messaggio.java
 //ogni giocatore connesso è gestito da una classe Client
 public class Client {
     //costante che indica il numero di giocatori
@@ -21,7 +22,7 @@ public class Client {
     //variabile per assegnare al client corrente la sua lettera correttamente
     static boolean primaLettera = true;
     //finestra di gioco 
-    static finestraGioco schermataGioco;
+    static FinestraGioco schermataGioco;
     //oggetto per la gestione dei carri, spari, vite..
     static GestioneGioco gc;
     /**
@@ -44,7 +45,7 @@ public class Client {
         riceviDatiInizialiCarri();
         
         //creo e visualizzo la finestra di partenza con il caricamento
-        finestraStart finestraStart = new finestraStart(letteraGiocatore);
+        FinestraStart finestraStart = new FinestraStart(letteraGiocatore);
         //apro la finestra
         finestraStart.apriFinestra();
         //la chiudo
@@ -133,7 +134,7 @@ public class Client {
         //creo l'oggetto che gestisce il gioco partendo dall'oggetto che gestisce i blocchi
         gc = new GestioneGioco(gb);
         //creo la schermata di gioco con l'oggetto che gestisce il gioco
-        schermataGioco = new finestraGioco(gc);
+        schermataGioco = new FinestraGioco(gc);
     }
     /**
      * metodo per ricevere i dati iniziali dei carri dal server
