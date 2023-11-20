@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 //classe per gestire la finestra di sconfitta
-public class finestraSconfitta extends JPanel {
+public class FinestraSconfitta extends JPanel {
     //oggetto objGrafica di tipo JFrame per gestire la grafica
     public static JFrame objGrafica;
     //sfondo della finestra
@@ -15,7 +15,7 @@ public class finestraSconfitta extends JPanel {
      * visualizza l'immagine giusta
      * @param letteraSconfitto lettera del carro sconfitto
      */
-    public finestraSconfitta(String letteraSconfitto) {
+    public FinestraSconfitta(String letteraSconfitto) {
         //inizializzo objGrafica
         objGrafica = new JFrame();
         //inizializzo l'oggetto imageIcon per gestire l'immagine di sfondo

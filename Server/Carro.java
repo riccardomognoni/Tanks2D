@@ -16,6 +16,9 @@ public class Carro {
     public int vite;
     //differenza di posizione del carro rispetto alla posizione vecchia
     final int DIFF_POS = 3;
+    //ultima posizione x e y validi del carro salvati (che escono dalla finestra e entrano in un blocco)
+    public int vecchiaXcarro;
+    public int vecchiaYcarro;
     /**
      * costruttore di default
      */
@@ -28,6 +31,8 @@ public class Carro {
         this.direzioneCorrente="W";
         //il carro inizia con 3 vite
         this.vite = 3;
+        this.vecchiaXcarro = 0;
+        this.vecchiaYcarro = 0;
     }
     /**
      * costruttore con parametri
@@ -41,6 +46,8 @@ public class Carro {
         this.direzioneCorrente="W";
         //il carro inizia con 3 vite
         this.vite = 3;
+        this.vecchiaXcarro = 0;
+        this.vecchiaYcarro = 0;
     }
     /**
      * muovo il carro in base alla direzione voluta

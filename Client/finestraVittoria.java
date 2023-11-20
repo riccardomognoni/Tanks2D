@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 //classe per la gestione della finestra di vittoria
-public class finestraVittoria extends JPanel {
+public class FinestraVittoria extends JPanel {
 
     //oggetto per la grafica
     public static JFrame objGrafica;
@@ -16,7 +16,7 @@ public class finestraVittoria extends JPanel {
      * costruttore con parametri
      * @param letteraVincitore lettera del player vincitore
      */
-    public finestraVittoria(String letteraVincitore) {
+    public FinestraVittoria(String letteraVincitore) {
         //inizializzo il frame per la grafica
         objGrafica = new JFrame();
         //oggetto per l'immagine di sfondo
