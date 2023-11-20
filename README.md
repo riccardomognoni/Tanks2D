@@ -8,3 +8,8 @@
 - Blocchi non distruggibili che fanno da ostacoli agli spari
 - Diminuzione delle vite del client in seguito a quando viene colpito
 - Schermate di vittoria/sconfitta
+##PER GIOCARE
+-attualmente nella versione di prova, si hanno una cartella clientProva e client
+-ognuna ha la propria socket che si connette al server (è come giocare su due host in remoto)
+-aprire in una finestra il server, in una il client e nell'altra threadClient
+-divertiti!
