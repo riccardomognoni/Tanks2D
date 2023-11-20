@@ -5,7 +5,7 @@ import javax.swing.*;
 
 import java.awt.*;
 
-//CLASSE PER GESTIRE LA FINESTRA GRAFICA
+//CLASSE PER GESTIRE LA FINESTRA GRAFICA DEL GIOCO 
 public class finestraGioco extends JPanel {
     /**
      * costanti per la grafica

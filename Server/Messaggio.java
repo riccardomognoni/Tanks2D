@@ -126,8 +126,8 @@ public class Messaggio {
      */
     public void inviaListaSpari(GestioneGioco gc) {
         //PER GESTIRE ERRORI:
-        //controllo aggiuntivo per vedere che la lista non sia vuota
-        if(gc.listaSpari.size() != 0) {
+        //controllo aggiuntivo per vedere che la lista non sia vuota o null
+        if(gc.listaSpari.size() != 0 && gc.listaSpari != null) {
             //scorro la lista degli spari
             for(int i = 0; i < gc.listaSpari.size(); i++) {
             //controllo aggiuntivo,controllo che lo sparo non sia null

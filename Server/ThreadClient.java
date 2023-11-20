@@ -2,7 +2,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Timer;
 
-//CLASSE PER LA GESTIONE DELLE RICHIESTE CLIENT/RISPOSTE AL CLIENT
+//CLASSE PER LA GESTIONE SU SERVER DELLE RICHIESTE DEL SINGOLO CLIENT
 public class ThreadClient implements Runnable {
     //socket del client
     private Socket clientSocket;

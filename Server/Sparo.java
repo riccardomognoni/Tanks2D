@@ -1,3 +1,4 @@
+//la classe che rappresenta il singolo sparo
 public class Sparo {
     //coordinata X dello sparo
     int XSparo;

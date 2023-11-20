@@ -1,5 +1,5 @@
 /**
- * classe Carro che gestisce il singolo carro armato
+ * classe Carro che gestisce il singolo carro armato, con i suoi controlli
  */
 public class Carro {
     //lettera del carro

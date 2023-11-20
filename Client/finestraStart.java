@@ -1,7 +1,9 @@
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -14,12 +16,16 @@ public class finestraStart extends JPanel {
     public String letteraPlayer;
     //countdown della finestra inziale
     public int countdown = 5; 
-
+    Image sfondo;
     /**
      * costruttore 
      * @param letteraPlayer lettera del giocatore
      */
     public finestraStart(String letteraPlayer) {
+        //creo l'immagine di sfondo
+        ImageIcon imageIcon = new ImageIcon("images/caricamento.jpg");
+        //la converto in imageIcon
+        this.sfondo = imageIcon.getImage();
         //assegno la lettera del giocatore
         this.letteraPlayer = letteraPlayer;
         //creo il nuovo frame
@@ -34,27 +40,41 @@ public class finestraStart extends JPanel {
         objGrafica.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //aggiungo al frame l'oggetto finestraStart per gestire la grafica
         objGrafica.add(this);
+
     }
     /**
      * disegno la finestra iniziale del gioco
      */
     @Override
     protected void paintComponent(Graphics g) {
-        //disegno la finestra
-        super.paintComponent(g);
         //imposto il colore dello sfondo
-        g.setColor(Color.BLACK); 
+        g.setColor(Color.GRAY);
         //riempio il rettangolo della finestra
         g.fillRect(0, 0, getWidth(), getHeight());
+
         //imposto il font della finestra
         Font font = new Font("Arial", Font.BOLD, 20);
         g.setFont(font);
+
         //imposto il colore del font
-        g.setColor(Color.WHITE);
-        //messaggio da visualizzare
-        String message = "Ciao giocatore " + letteraPlayer + "! Il gioco inizierà tra " + countdown + " secondi. Preparati!";
-        //disegno il messaggio
-        g.drawString(message, 50, 300);
+        g.setColor(Color.BLACK);
+
+        //disegno l'immagine di sfondo
+        g.drawImage(sfondo, 0, 0, getWidth(), getHeight(), this);
+
+        //messaggio principale
+        String messaggioGiocatore = "Ciao giocatore " + letteraPlayer + "! La battaglia inizierà tra " + countdown + " secondi. Preparati!";
+
+        //messaggio aggiuntivo con i comandi
+        String messaggioComandi = "Comandi: WASD per muoverti, M per sparare.";
+
+        //messaggio aggiuntivo con il tempo di ricarica
+        String messaggioRicarica = "Ricarica: 3 secondi tra un colpo e l'altro.";
+
+        //disegno i messaggi
+        g.drawString(messaggioGiocatore, 50, 430);
+        g.drawString(messaggioComandi, 50, 460);
+        g.drawString(messaggioRicarica, 50, 490);
     }
     /**
      * metodo per rendere visibile la finestra di start

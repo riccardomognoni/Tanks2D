@@ -6,6 +6,8 @@ import java.net.Socket;
 import java.util.Timer;
 import java.util.TimerTask;
 
+//classe che implementa i metodi utili alla classe ThreadClient, che richiamano a loro volta
+//i metodi di GestioneGioco. Ha inoltre altri metodi utili a tale classe.
 public class FunzionalitaThreadClient {
     //oggetto per gestire la comunicazione con il client
     public Messaggio comunicazioneClient;

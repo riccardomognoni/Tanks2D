@@ -3,7 +3,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
-//classe PRINCIPALE del client (singolo)
+//classe PRINCIPALE del client (singolo) che gestisce le risposte del server
+//e richiama i metodi opportuni per lo scambio di dati.
 //ogni giocatore connesso è gestito da una classe Client
 public class Client {
     //costante che indica il numero di giocatori

@@ -1,4 +1,4 @@
-//classe Blocco
+//classe che rappresenta il singolo blocco
 public class Blocco {
     //posizione x del blocco
     int posizioneX;

@@ -3,7 +3,9 @@ import java.io.IOException;
 
 import javax.swing.*;
 
-//CLASSE PER LA GESTIONE DEL GIOCO DA PARTE DEL SERVER
+//CLASSE PER LA GESTIONE DEL GIOCO DA PARTE DEL SERVER:
+//gestisce i controlli sui dati ricevuti dai client (la classe è comune ai due client)
+//e altri metodi/controlli sulla lista dei carri, degli spari, le vite e i blocchi
 public class GestioneGioco {
     //definizione variabili
     GestioneFinestra gestioneFin;
@@ -13,9 +15,14 @@ public class GestioneGioco {
     List<Sparo> listaSpari;
     //indice dello sparo attuale tra i client
     int indiceSparoAttuale;
+    //variabile che permette di verificare se lo sparo ha già colpito un blocco per evitare di colpirlo
+    //due volte
     boolean bloccoColpitoCorrente;
-    long ultimoTempoSparoA = System.currentTimeMillis();
-    long ultimoTempoSparoB = System.currentTimeMillis();
+    //variabili che servono per il tempo, per verificare che tra uno sparo e l'altro intercorrano almeno 3 secondi
+    //indicano l'istante di tempo in millis in cui è stato sparato l'ultimo colpo
+    long ultimoTempoSparoA;
+    long ultimoTempoSparoB;
+    //intervallo minimo di tempo tra gli spari
     private static final int TEMPO_MINIMO_TRA_SPARI = 3000;
     //definizione costanti
     final static int WIDTH_FINESTRA_SPARO = 630;
@@ -40,6 +47,8 @@ public class GestioneGioco {
         this.listaSpari = new ArrayList();
         //imposto il valore dell'indiceSparoAttuale a -1
         this.indiceSparoAttuale = -1;
+        this.ultimoTempoSparoA = System.currentTimeMillis();
+        this.ultimoTempoSparoB =System.currentTimeMillis();
     } 
     /**
      * aggiungo il carro alla lista dei carri
