@@ -6,7 +6,7 @@ import org.xml.sax.SAXException;
 //classe PRINCIPALE del client (singolo) che gestisce le risposte del server
 //e richiama i metodi opportuni per lo scambio di dati.
 //per impostare IP e PORT del server con cui comunichiamo -> in classe Messaggio.java
-//ogni giocatore connesso è gestito da una classe Client
+//ogni giocatore connesso è gestito da una classe Client 
 public class Client {
     //costante che indica il numero di giocatori
     //il gioco funziona con 2 carri

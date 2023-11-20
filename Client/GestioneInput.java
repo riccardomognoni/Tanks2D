@@ -99,6 +99,7 @@ public class GestioneInput extends KeyAdapter  {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
+            //stampo il comando
             System.out.println("Il tasto M è stato premuto. spara!");
         }
     }
