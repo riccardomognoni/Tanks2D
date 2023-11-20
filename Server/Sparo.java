@@ -6,7 +6,8 @@ public class Sparo {
     int YSparo;
     //lettera del carro di apparteneneza dello sparo
     String letteraCarro;
-    //indice dello sparo tra gli spari del client
+    /** indice dello sparo considerato tra gli spari del singolo client
+     */
     int indiceSparo;
 
     /**
@@ -30,6 +31,7 @@ public class Sparo {
         this.YSparo = ySparo;
         this.letteraCarro = lettera;
         this.indiceSparo = indiceSparo;
+        System.out.println(indiceSparo);
     }
     /**
      * metodo static per ottenere lo sparo dal comando splittato (per ;)

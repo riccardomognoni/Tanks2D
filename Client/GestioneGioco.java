@@ -10,23 +10,24 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.Timer;
 
-/**
- * due GestioneGioco,
- * partono entrambe con indiceSparo = 0
- * A invia al server ad esempio indiceSparo = 0
- * il server aggiunge alla lista A,0
- * B invia al server ad esempio indiceSparo = 0
- * il server aggiunge alla lista B,0
- * se il server elimina B,0 perchè ha colpito qualcosa
- * invia a B indiceSparo = 0 che elimina nella sua lista quello con indiceSparo = 0
- * creo una nuova listaVisualizzazione che invece contiene gli spari e che è quella usata per visualizzare
- * tutti gli spari, ricevo dal server la lista con tutti gli spari e la visualizzo
- */
 //CLASSE PER LA GESTIONE DEL GIOCO DA PARTE DEL CLIENT TRAMITE DATI RICEVUTI DA SERVER
 public class GestioneGioco  {
     //gestisco la lista dei carri e la lista degli spari oltre che la gestione blocchi
     GestioneBlocchi gestioneBl;
     List<Carro> listaCarri;
+    /**funzionamento sparo:
+     * due GestioneGioco, una per client,
+     * funzionamento sparo:
+     * partono entrambe con indiceSparo = 0
+     * A invia al server ad esempio indiceSparo = 0
+     * il server aggiunge alla lista A,0
+     * B invia al server ad esempio indiceSparo = 0
+     * il server aggiunge alla lista B,0
+     * se il server elimina B,0 perchè ha colpito qualcosa
+     * il server invia a B indiceSparo = 0 che elimina nella sua lista quello con indiceSparo = 0
+     * listaVisualizzazione invece contiene gli spari e che è quella usata per visualizzare
+     * tutti gli spari (di entrambi i client), ricevo dal server la lista con tutti gli spari e la visualizzo
+     */
     //lista degli spari del giocatore a cui appartiene il client corrente
     List<Sparo> listaSpari;
     //lista degli spari di TUTTI i giocatori, per la visualizzazione

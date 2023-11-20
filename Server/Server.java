@@ -2,7 +2,7 @@ import java.io.*;
 import java.net.*;
 import java.nio.ByteBuffer;
 
-
+//classe principale del server che contiene il main
 public class Server {
     //indice che indica la lettera del carro corrente (es: A = indice 0)
     public static int indiceLettera = 0;

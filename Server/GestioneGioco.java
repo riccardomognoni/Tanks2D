@@ -13,8 +13,6 @@ public class GestioneGioco {
     List<Carro> listaCarri;
     //lista degli spari di tutti i client
     List<Sparo> listaSpari;
-    //indice dello sparo attuale tra i client
-    int indiceSparoAttuale;
     //variabile che permette di verificare se lo sparo ha già colpito un blocco per evitare di colpirlo
     //due volte
     boolean bloccoColpitoCorrente;
@@ -45,8 +43,6 @@ public class GestioneGioco {
         //creo la lista dei carri e quella degli spari
         this.listaCarri = new ArrayList();
         this.listaSpari = new ArrayList();
-        //imposto il valore dell'indiceSparoAttuale a -1
-        this.indiceSparoAttuale = -1;
         this.ultimoTempoSparoA = System.currentTimeMillis();
         this.ultimoTempoSparoB =System.currentTimeMillis();
     } 
@@ -72,7 +68,7 @@ public class GestioneGioco {
                 if (bloccoColpitoCorrente) {
                     return true;
                 //se ha colpito un carro allora termino lo sparo
-                } else if (carro.controllaColpoSuCarro(sparo, indiceSparoAttuale)) {
+                } else if (carro.controllaColpoSuCarro(sparo)) {
                     return true;
                 }
             }
@@ -84,7 +80,7 @@ public class GestioneGioco {
      * inzializzo lo sparo da lettera del client che lo ha creato
      * e indice dello sparo rispetto al client
      * @param lettera lettera del client che ha sparato
-     * @param indice indice dello sparo
+     * @param indice indice dello sparo tra gli spari del client
      * @return il comando da inviare al client per la creazione dello sparo
      */
     public String inizializzaSparo(String lettera, String indice) {
@@ -120,7 +116,7 @@ public class GestioneGioco {
     /**
      * inizializzo lo sparo calcolandone la x e y
      * @param posIniSparo stringa che indica il comando con la posizione iniziale dello sparo
-     * @param indice indice dello sparo
+     * @param indice indice dello sparo tra gli spari del client
      * @param lettera lettera del carro che ha sparato
      * @return il comando da inviare contenuto in posIniSparo
      */
@@ -288,7 +284,7 @@ public class GestioneGioco {
         for(int i = 0; i < this.listaSpari.size(); i++) {
             //se la lettera dello sparo nella lista corrisponde a quella dello sparo da eliminare
             if(this.listaSpari.get(i).letteraCarro.equals(sparo.letteraCarro)) {
-                 //se l'indice dello sparo nella lista corrisponde a quella dello sparo da eliminare
+                 //se l'indice dello sparo nella lista corrisponde a quello dello sparo da eliminare
                 if(this.listaSpari.get(i).indiceSparo == sparo.indiceSparo) {
                     //lo rimuovo dalla lista degli spari
                     this.listaSpari.remove(i);

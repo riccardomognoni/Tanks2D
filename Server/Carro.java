@@ -94,21 +94,15 @@ public class Carro {
     /**
      * controllo se lo sparo ha colpito il carro
      * @param sparo //sparo da controllare
-     * @param indiceSparoColpito //indice dello sparo attuale
      * @return
      */
-    public boolean controllaColpoSuCarro(Sparo sparo, int indiceSparoColpito) {
+    public boolean controllaColpoSuCarro(Sparo sparo) {
         //controllo se la x dello sparo rientra nell'intervallo della x e y del giocatore
         if (sparo.XSparo <= this.xCarro + 25 && sparo.XSparo >= this.xCarro - 25 && sparo.YSparo <= this.yCarro + 25 && sparo.YSparo >= this.yCarro - 25) {
-            //se l'indice dello sparo è diverso da quello dello sparo attuale (cioè lo sparo attuale non ha ancora colpito il carro avversario)
-            if (sparo.indiceSparo != indiceSparoColpito) {
-                //diminuisco le vite del carro
-                if(this.vite > 0) {
-                    this.vite--;
-                } 
-                //imposto l'indiceSparoAttuale per evitare che lo sparo possa nuovamente togliere le vite al client
-                indiceSparoColpito = sparo.indiceSparo;
-            }
+            //diminuisco le vite del carro
+            if(this.vite > 0) {
+                this.vite--;
+            } 
             System.out.println("Vite di " + this.letteraCarro + ": " + this.vite);
             //ritorno true perchè lo sparo ha colpito il carro
             return true;

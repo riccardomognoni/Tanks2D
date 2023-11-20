@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+//classe del singolo sparo
 public class Sparo {
     //x dello sparo
     int XSparo;
