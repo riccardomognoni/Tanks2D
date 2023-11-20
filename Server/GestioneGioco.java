@@ -6,6 +6,7 @@ import javax.swing.*;
 //CLASSE PER LA GESTIONE DEL GIOCO DA PARTE DEL SERVER:
 //gestisce i controlli sui dati ricevuti dai client (la classe è comune ai due client)
 //e altri metodi/controlli sulla lista dei carri, degli spari, le vite e i blocchi
+//è comune ai client
 public class GestioneGioco {
     //definizione variabili
     GestioneFinestra gestioneFin;

@@ -2,6 +2,7 @@ import java.io.*;
 import java.net.*;
 import java.nio.ByteBuffer;
 
+//per impostare IP e PORT del server -> in classe Messaggio.java
 //classe principale del server che contiene il main
 public class Server {
     //indice che indica la lettera del carro corrente (es: A = indice 0)

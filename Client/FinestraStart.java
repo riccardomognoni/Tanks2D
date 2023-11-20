@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 //finestra di caricamento visualizzata all'inzio
-public class finestraStart extends JPanel {
+public class FinestraStart extends JPanel {
     //oggetto JFrame per la grafica
     public JFrame objGrafica;
     //lettera del giocatore
@@ -21,7 +21,7 @@ public class finestraStart extends JPanel {
      * costruttore 
      * @param letteraPlayer lettera del giocatore
      */
-    public finestraStart(String letteraPlayer) {
+    public FinestraStart(String letteraPlayer) {
         //creo l'immagine di sfondo
         ImageIcon imageIcon = new ImageIcon("images/caricamento.jpg");
         //la converto in imageIcon

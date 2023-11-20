@@ -1,8 +1,6 @@
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class InputKey extends KeyAdapter  {
     Messaggio comClient;
@@ -47,7 +45,7 @@ public class InputKey extends KeyAdapter  {
             }
         } else if (keyCode == KeyEvent.VK_M) {
             try {
-                this.comClient.inviaServer(letteraGiocatore + ";" +"M");
+                 this.comClient.inviaServer(letteraGiocatore + ";" +"M");
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
