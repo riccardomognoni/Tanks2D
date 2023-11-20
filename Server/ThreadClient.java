@@ -62,6 +62,7 @@ public class ThreadClient implements Runnable {
                  * senza colpire un ostacolo
                 */ 
                 } else if(comandoSplit[0].equals("muoviCarro")) {
+                    System.out.println(comando);
                     funzionalitaThread.muoviCarro(comandoSplit);
                 }
                 /**

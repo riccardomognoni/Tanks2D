@@ -20,9 +20,11 @@ public class GestioneFinestra {
     //lista dei blocchi
     List<Blocco> listaBlocchi;
     //ultima posizione X valida del carro salvata
-    int vecchiaXcarro;
+    int vecchiaXcarroA;
+    int vecchiaXcarroB;
     //ultima posizione Y valida del carro salvata
-    int vecchiaYcarro;
+    int vecchiaYcarroA;
+    int vecchiaYcarroB;
     //indice del blocco colpito, per evitare che uno stesso sparo possa colpire
     //più volte uno stesso blocco
     int indiceBloccoColpito;
@@ -35,8 +37,10 @@ public class GestioneFinestra {
         //imposto l'indice del blocco colpito a -1 (valore che non è possibile ricevere)
         this.indiceBloccoColpito = -1;
         //inizializzo la pos. salvata del carro
-        this.vecchiaXcarro = 0;
-        this.vecchiaYcarro = 0;
+        this.vecchiaXcarroA = 0;
+        this.vecchiaYcarroA = 0;
+        this.vecchiaXcarroB = 0;
+        this.vecchiaYcarroB = 0;
         this.listaBlocchi = new ArrayList<Blocco>();
         //inizializzo la lista dei blocchi, inserendo tutti i blocchi nell'ArrayList
         inizializzaBlocchi();
@@ -61,16 +65,28 @@ public class GestioneFinestra {
         //controllo se esce dai bordi destro o sinistro
         if(carro.xCarro < 0 || carro.xCarro > WIDTH_FINESTRA) {
             //se esce reimposto come x e y del carro l'ultima posizione valida
-            carro.xCarro = this.vecchiaXcarro;
-            carro.yCarro = this.vecchiaYcarro;
+            if(carro.letteraCarro.equals("A")) {
+                carro.xCarro = this.vecchiaXcarroA;
+                carro.yCarro = this.vecchiaYcarroA;
+            }
+            else if(carro.letteraCarro.equals("B")) {
+                carro.xCarro = this.vecchiaXcarroB;
+                carro.yCarro = this.vecchiaYcarroB;
+            }
             //ritorno true
             return true;
         }
         //controllo se esce dai bordi sopra o sotto
         if(carro.yCarro < 0 || carro.yCarro > HEIGHT_FINESTRA) {
             //se esce reimposto come x e y del carro l'ultima posizione valida
-            carro.xCarro = this.vecchiaXcarro;
-            carro.yCarro = this.vecchiaYcarro;
+            if(carro.letteraCarro.equals("A")) {
+                carro.xCarro = this.vecchiaXcarroA;
+                carro.yCarro = this.vecchiaYcarroA;
+            }
+            else if(carro.letteraCarro.equals("B")) {
+                carro.xCarro = this.vecchiaXcarroB;
+                carro.yCarro = this.vecchiaYcarroB;
+            }
             //ritorno true
             return true;
         }
@@ -90,16 +106,28 @@ public class GestioneFinestra {
                  //controllo se la y del carro entra nei limiti del blocco
                 if(carro.yCarro<= this.listaBlocchi.get(i).posizioneY + SPESSORE_BLOCCO && carro.yCarro>= this.listaBlocchi.get(i).posizioneY-SPESSORE_BLOCCO) {
                     //se la x e y del carro entrano nei limiti del blocco reimposto la x e y del carro vecchi (ultima pos. valida)
-                    carro.xCarro = this.vecchiaXcarro;
-                    carro.yCarro = this.vecchiaYcarro;
+                    if(carro.letteraCarro.equals("A")) {
+                        carro.xCarro = this.vecchiaXcarroA;
+                        carro.yCarro = this.vecchiaYcarroA;
+                    }
+                    else if(carro.letteraCarro.equals("B")) {
+                        carro.xCarro = this.vecchiaXcarroB;
+                        carro.yCarro = this.vecchiaYcarroB;
+                    }
                     //ritorno true
                     return true;
                 }
             }
         }
         //imposto come ultima posizione x e y valida quella attuale
-        this.vecchiaXcarro = carro.xCarro;
-        this.vecchiaYcarro = carro.yCarro;
+        if(carro.letteraCarro.equals("A")) {
+            this.vecchiaXcarroA = carro.xCarro;
+            this.vecchiaYcarroA = carro.yCarro;
+        }
+        else if(carro.letteraCarro.equals("B")) {
+            this.vecchiaXcarroB = carro.xCarro;
+            this.vecchiaYcarroB = carro.yCarro;
+        }
         //ritorno false
         return false;
     }
