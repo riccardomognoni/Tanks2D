@@ -13,3 +13,6 @@
 - ognuna ha la propria socket che si connette al server (è come giocare su due host in remoto)
 - aprire in una finestra il server, in una il client e nell'altra threadClient
 - divertiti!
+O in alternativa:
+- modificare nella classe "Messaggio" del server e dei client gli indirizzi IP e le porte per porter connettersi a un host
+  che fa da server e giocsare
